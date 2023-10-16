@@ -27,5 +27,5 @@ coverage
 *.sln
 *.sw?
 
-# Database file
+# Database file (sqlite)
 stakeirb-database.db
