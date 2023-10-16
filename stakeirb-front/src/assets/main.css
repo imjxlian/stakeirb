@@ -1,35 +1,97 @@
-@import './base.css';
+@import url('./base.css');
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-text-light);
+  font-family: 'Roboto', sans-serif;
 }
 
-a,
-.green {
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5rem;
+  background-color: transparent;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo-main {
+  height: 30px;
+}
+
+.logo-currency {
+  height: 1.1em;
+  margin-left: 0.4rem;
+}
+
+.balance-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-background-dark);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.05rem;
+  border-radius: 1rem;
+  gap: 1rem;
+}
+
+.balance-display div {
+  display: flex;
+  align-items: center;
+}
+
+.balance-action {
+  background-color: var(--color-green-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.05rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.balance-action:hover {
+  background-color: var(--color-green-dark);
+}
+
+.user-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.05rem;
+  border-radius: 1rem;
+  gap: 2rem;
+}
+
+.user-menu a {
+  color: var(--color-text-light);
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.user-menu button {
+  font-weight: bold;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.user-profile-pic {
+  height: 1rem;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
