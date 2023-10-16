@@ -161,24 +161,142 @@ const hydrateDatabase = async () => {
       });
   
       console.log('Données insérées avec succès');
+
     } catch (error) {
       console.error('Une erreur s\'est produite :', error);
-    } finally {
-      sequelize.close();
     }
 };
   
-hydrateDatabase(); 
+hydrateDatabase();
 
 /* Routes Express */
 
-/* Démarrage serveur */
-const server = app.listen(3000, () => {
-    console.log('Serveur phe-backend démarré !');
+// Récupération de tous les utilisateurs
+app.get('/users', async (req, res) => {
+    try {
+        const users = await User.findAll();
+        res.json(users);
+    } catch (error) {
+        console.error('Une erreur s\'est produite :', error);
+    }
 });
 
-/* Partie Socket.io */
-import { Server } from 'socket.io';
-const io = new Server(server, { cors: { origin: ['http://localhost:5173', 'http://127.0.0.1:5173'] } });
+// Récupération d'un utilisateur
+app.get('/users/:uuid_user', async (req, res) => {
+    const user = await User.findOne({ where: { uuid_user: req.params.uuid_user } });
+    res.json(user);
+});
 
-io.on('connection', socket => console.log('Connection ' + socket.id));
+// Création d'un utilisateur
+app.post('/users', async (req, res) => {
+    const user = await User.create(req.body);
+    res.json(user);
+});
+
+// Mise à jour d'un utilisateur
+app.put('/users/:uuid_user', async (req, res) => {
+    const user = await User.findOne({ where: { uuid_user: req.params.uuid_user } });
+    user.update(req.body);
+    res.json(user);
+});
+
+// Suppression d'un utilisateur
+app.delete('/users/:uuid_user', async (req, res) => {
+    const user = await User.findOne({ where: { uuid_user: req.params.uuid_user } });
+    user.destroy();
+    res.json(user);
+});
+
+// Récupération de tous les jeux
+app.get('/games', async (req, res) => {
+    const games = await Game.findAll();
+    res.json(games);
+});
+
+// Récupération d'un jeu
+app.get('/games/:slug', async (req, res) => {
+    const game = await Game.findOne({ where: { slug: req.params.slug } });
+    res.json(game);
+});
+
+// Création d'un jeu
+app.post('/games', async (req, res) => {
+    const game = await Game.create(req.body);
+    res.json(game);
+});
+
+// Mise à jour d'un jeu
+app.post('/games/:slug', async (req, res) => {
+    const game = await Game.findOne({ where: { slug: req.params.slug } });
+    game.update(req.body);
+    res.json(game);
+});
+
+// Suppression d'un jeu
+app.delete('/games/:slug', async (req, res) => {
+    const game = await Game.findOne({ where: { slug: req.params.slug } });
+    game.destroy();
+    res.json(game);
+});
+
+// Récupération de tous les paris
+app.get('/bets', async (req, res) => {
+    const bets = await Bets.findAll();
+    res.json(bets);
+});
+
+// Récupération d'un pari
+app.get('/bets/:id', async (req, res) => {
+    const bet = await Bets.findOne({ where: { id: req.params.id } });
+    res.json(bet);
+});
+
+// Création d'un pari
+app.post('/bets', async (req, res) => {
+    const bet = await Bets.create(req.body);
+    res.json(bet);
+});
+
+// Mise à jour d'un pari
+app.post('/bets/:id', async (req, res) => {
+    const bet = await Bets.findOne({ where: { id: req.params.id } });
+    bet.update(req.body);
+    res.json(bet);
+});
+
+// Suppression d'un pari
+app.delete('/bets/:id', async (req, res) => {
+    const bet = await Bets.findOne({ where: { id: req.params.id } });
+    bet.destroy();
+    res.json(bet);
+});
+
+// Récupération de tous les messages
+app.get('/messages', async (req, res) => {
+    const messages = await Messages.findAll();
+    res.json(messages);
+});
+
+// Récupération d'un message
+app.get('/messages/:id', async (req, res) => {
+    const message = await Messages.findOne({ where: { id: req.params.id } });
+    res.json(message);
+});
+
+// Création d'un message
+app.post('/messages', async (req, res) => {
+    const message = await Messages.create(req.body);
+    res.json(message);
+});
+
+// Suppression d'un message
+app.delete('/messages/:id', async (req, res) => {
+    const message = await Messages.findOne({ where: { id: req.params.id } });
+    message.destroy();
+    res.json(message);
+});
+
+/* Démarrage serveur */
+app.listen(3000, () => {
+    console.log('Serveur phe-backend démarré !');
+});
