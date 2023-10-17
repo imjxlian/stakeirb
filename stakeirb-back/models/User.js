@@ -38,5 +38,10 @@ export default function(sequelize) {
     },
   });
 
+  User.associate = (models) => {
+    User.hasMany(models.Bets, { foreignKey: 'user_uuid' });
+    User.hasMany(models.Messages, { foreignKey: 'user_uuid' });
+  };
+
   return User;
 }

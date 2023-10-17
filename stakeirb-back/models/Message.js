@@ -1,9 +1,9 @@
-// models/Messages.js
+// models/Message.js
 
 import { DataTypes } from 'sequelize';
 
 export default function(sequelize) {
-  const Messages = sequelize.define('Messages', {
+  const Message = sequelize.define('Message', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -22,5 +22,9 @@ export default function(sequelize) {
     },
   });
 
-  return Messages;
+  Message.associate = (models) => {
+    Message.belongsTo(models.User, { foreignKey: 'user_uuid' });
+  };
+
+  return Message;
 }

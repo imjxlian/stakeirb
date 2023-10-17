@@ -1,9 +1,9 @@
-// models/Bets.js
+// models/Bet.js
 
 import { DataTypes } from 'sequelize';
 
 export default function(sequelize) {
-  const Bets = sequelize.define('Bets', {
+  const Bet = sequelize.define('Bet', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -29,5 +29,10 @@ export default function(sequelize) {
     },
   });
 
-  return Bets;
+  Bet.associate = (models) => {
+    Bet.belongsTo(models.User, { foreignKey: 'user_uuid' });
+    Bet.belongsTo(models.Game, { foreignKey: 'game_id' });
+  };
+
+  return Bet;
 }
