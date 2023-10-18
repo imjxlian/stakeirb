@@ -8,9 +8,9 @@
   --color-text-dark: #181818;
   --color-text-mute: #2c3e50;
   --color-green-primary: #00b894;
-  --color-green-dark: #00a389;
+  --color-green-secondary: #00a389;
   --color-red-primary: #e34242;
-  --color-red-dark: #ff7675;
+  --color-red-secondary: #ff7675;
   --color-blue-primary: #0984e3;
   --color-blue-secondary: #74b9ff;
   --color-yellow-primary: #fdcb6e;
@@ -19,31 +19,4 @@
   --color-purple-secondary: #a29bfe;
   --color-orange-primary: #e17055;
   --color-orange-secondary: #fab1a0;
-}
-
-.button {
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-
-.button.success {
-  background-color: var(--color-green-primary);
-  color: var(--color-text-light);
-}
-
-.button.success:hover {
-  background-color: var(--color-green-dark);
-}
-
-.button.danger {
-  background-color: var(--color-red-primary);
-  color: var(--color-text-light);
-}
-
-.button.danger:hover {
-  background-color: var(--color-red-dark);
 }
