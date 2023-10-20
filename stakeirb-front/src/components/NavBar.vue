@@ -1,16 +1,24 @@
 <template>
-  <header class="container">
+  <header class="menu-container">
     <div class="grid wrapper nav-container">
       <div class="flex flex-row logo-container">
         <a href="/">
-          <img src="../assets/images/logo-stakeirb-light.png" alt="Stak'Eirb logo" class="logo" />
+          <img
+            src="../assets/images/logos/logo-stakeirb-light.png"
+            alt="Stak'Eirb logo"
+            class="logo"
+          />
         </a>
       </div>
 
       <div class="flex flex-row bg-primary-dark balance-container">
         <div class="flex flex-row balance-inner">
           <span class="balance-amount">126,321</span>
-          <img src="../assets/images/coineirb.png" alt="Coineirb logo" class="currency-icon" />
+          <img
+            src="../assets/images/icons/coineirb.png"
+            alt="Coineirb logo"
+            class="currency-icon"
+          />
         </div>
         <button class="button success bg-primary-green color-primary-light deposit">+</button>
       </div>
@@ -27,17 +35,28 @@
           </div>
         </a>
         <a href="/logout">
-          <button class="button danger fw-bold">Logout</button>
+          <InputButton
+            :value="'Logout'"
+            :type="'danger'"
+            :disabled="false"
+            :action="
+              () => {
+                console.log('Logout')
+              }
+            "
+          />
         </a>
       </div>
     </div>
   </header>
 </template>
 
-<script></script>
+<script setup>
+import InputButton from './inputs/InputButton.vue'
+</script>
 
 <style scoped>
-.container {
+.menu-container {
   background-color: transparent;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   position: relative;

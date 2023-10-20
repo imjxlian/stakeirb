@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg-primary-light">
+  <div class="bar-container bg-primary-light">
     <div class="progress-bar bg-primary-green" :style="{ width: progress + '%' }"></div>
   </div>
 </template>
@@ -9,7 +9,7 @@ defineProps(['progress'])
 </script>
 
 <style scoped>
-.container {
+.bar-container {
   height: 1rem;
   border-radius: 1rem;
   overflow: hidden;
