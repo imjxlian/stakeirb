@@ -6,9 +6,10 @@
   --color-background-dark: #17212a;
   --color-text-light: #f8f8f8;
   --color-text-dark: #181818;
-  --color-text-mute: #2c3e50;
+  --color-text-mute: #b1bad3;
   --color-green-primary: #00b894;
   --color-green-secondary: #00a389;
+  --color-green-tertiary: rgb(2, 200, 167);
   --color-red-primary: #e34242;
   --color-red-secondary: #ff7675;
   --color-blue-primary: #0984e3;
@@ -19,4 +20,22 @@
   --color-purple-secondary: #a29bfe;
   --color-orange-primary: #e17055;
   --color-orange-secondary: #fab1a0;
+  --color-grey-primary: #b1bad3;
+
+  --grey-100: #d5dceb;
+  --grey-200: #b1bad3;
+  --grey-300: #557086;
+  --grey-350: #3d5564;
+  --grey-400: #2f4553;
+  --grey-500: #213743;
+  --grey-600: #1a2c38;
+  --grey-700: #0f212e;
+  --grey-800: #071d2a;
+  --grey-900: #071824;
+
+  --red-500: #e9113c;
+
+  --green-500: #00e701;
+
+  --btn-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.12);
 }

@@ -1,12 +1,15 @@
 @import url('./base.css');
+@import url('https://fonts.cdnfonts.com/css/metropolis-2');
 
 html,
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-background);
+  background-color: var(--grey-600);
   color: var(--color-text-light);
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 /* Global styles */
@@ -111,15 +114,14 @@ body {
   color: var(--color-text-light);
 }
 
+.color-primary-grey {
+  color: var(--color-text-mute);
+}
+
 /* Buttons styles */
 
-.button {
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+.container {
+  padding: 3rem 1rem;
 }
 
 .button.success {
@@ -150,4 +152,19 @@ body {
 
 .currency-icon {
   height: 1.1em;
+}
+
+input {
+  border: none;
+  color: var(--color-text-light);
+  font-weight: bold;
+}
+
+input[type='number']:focus {
+  outline: none;
+}
+
+.btn-action {
+  background-color: var(--grey-400);
+  padding: 0.7em 1rem;
 }
