@@ -16,7 +16,7 @@
         <img :src="imageSrc" alt="Button Icon" />
       </div>
 
-      <div class="actions-container" v-if="actions.length > 0">
+      <div class="actions-container" v-if="actions">
         <div class="actions-inner" v-for="(action, index) in actions" :key="action.value">
           <input type="button" class="action" :value="action.value" @click="action.action" />
           <div class="divider" v-if="index < actions.length - 1"></div>
@@ -26,10 +26,18 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['step', 'type', 'min', 'max', 'value', 'disabled', 'label', 'imageSrc', 'actions']
-}
+<script setup>
+const { step, type, min, max, value, disabled, label, imageSrc, actions } = defineProps([
+  'step',
+  'type',
+  'min',
+  'max',
+  'value',
+  'disabled',
+  'label',
+  'imageSrc',
+  'actions'
+])
 </script>
 
 <style scoped>
