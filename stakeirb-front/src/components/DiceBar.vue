@@ -1,118 +1,101 @@
 <template>
   <div class="dice-container">
-    <div class="bets-history">
-      <PreviousRoll :bet="bet" v-for="bet in lastBets" :key="bet" />
-    </div>
+    <transition-group name="bet" tag="div" class="bets-history">
+      <PreviousRoll :bet="bet" v-for="bet in lastBets" :key="bet.id" />
+    </transition-group>
 
-    <div
-      class="bar"
-      :style="`background-color: ${
-        isUnder ? 'var(--color-red-primary)' : 'var(--color-green-primary)'
-      }`"
-    >
+    <div :class="['bar', isUnder ? 'red-primary' : 'green-primary']">
       <div
-        class="bar-inner"
-        :style="`width: ${range}%; background-color: ${
-          isUnder ? 'var(--color-green-primary)' : 'var(--color-red-primary)'
-        }`"
+        :class="['bar-inner', isUnder ? 'green-primary' : 'red-primary']"
+        :style="`width: ${range}%;`"
       >
-        <div class="dice" :style="`left: ${result}%`">
-          <img
-            src="../assets/images/games/dice/dice.svg"
-            alt="Dice"
-            class=""
-            :style="`left: ${result}%;`"
-          />
-          <span
-            :style="`color: ${win ? 'var(--color-green-primary)' : 'var(--color-red-primary)'}`"
-            >{{ result }}</span
-          >
+        <div
+          :class="{ dice: true, hide: props.hideDice, show: !props.hideDice }"
+          :style="`left: ${result}%; transform: scale(${props.diceScale})`"
+        >
+          <img src="../assets/images/games/dice/dice.svg" alt="Dice" :style="`left: ${result}%;`" />
+          <span :class="{ green: win, red: !win }">{{ result }}</span>
         </div>
       </div>
-      <input type="range" class="bar-range" step="0.01" min="2" max="98" v-model="range" />
+      <input
+        type="range"
+        class="bar-range"
+        step="1"
+        min="2"
+        max="98"
+        :value="props.range"
+        @input="$emit('update-range', $event.target.value)"
+      />
     </div>
 
     <div class="bet-infos">
       <InputNumber
-        :step="1"
-        :min="0"
+        :step="0.01"
+        :min="1"
+        :max="10000"
+        label="Multiplier"
+        imageSrc="../src/assets/images/icons/x.svg"
+        :disabled="true"
         :value="multiplier"
-        :label="'Multiplier'"
-        :imageSrc="'../src/assets/images/icons/x.svg'"
-        :disabled="false"
-        :actions="[]"
       />
 
       <InputNumber
         :step="1"
-        :type="'submit'"
+        type="submit"
         :min="0"
         :value="range"
         :label="'Roll ' + textUnderOver"
-        :imageSrc="'../src/assets/images/icons/double-arrows.svg'"
+        imageSrc="../src/assets/images/icons/double-arrows.svg"
+        @click="changeSide"
         :disabled="false"
-        :onclick="changeSide"
-        :actions="[]"
       />
 
       <InputNumber
-        :step="1"
-        :min="0"
+        :step="0.01"
+        :min="0.01"
+        :max="98"
+        label="Chance of Winning"
+        imageSrc="../src/assets/images/icons/percent.svg"
+        :disabled="true"
         :value="probabilityOfWinning"
-        :label="'Chance of Winning'"
-        :imageSrc="'../src/assets/images/icons/percent.svg'"
-        :disabled="false"
-        :actions="[]"
+        @update:value="probabilityOfWinning = $event"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { defineProps, computed } from 'vue'
 import InputNumber from './inputs/InputNumber.vue'
 import PreviousRoll from './PreviousRoll.vue'
 
-let betsHistory = ref([
-  { win: true, result: 13.32 },
-  { win: false, result: 63.02 },
-  { win: true, result: 29.1 },
-  { win: true, result: 100.0 },
-  { win: false, result: 23.32 },
-  { win: true, result: 22.12 },
-  { win: true, result: 23.32 },
-  { win: false, result: 13.32 },
-  { win: true, result: 2.12 }
+const props = defineProps([
+  'range',
+  'isUnder',
+  'result',
+  'multiplier',
+  'betsHistory',
+  'hideDice',
+  'diceScale'
 ])
+const emit = defineEmits(['update-isUnder', 'update-range'])
 
-let range = ref(50)
-let isUnder = ref(true)
-let result = ref((50.0).toFixed(2))
+const textUnderOver = computed(() => (props.isUnder ? 'Under' : 'Over'))
 
-let win = computed(() =>
-  isUnder.value
-    ? parseFloat(result.value) <= parseFloat(range.value)
-    : parseFloat(result.value) > parseFloat(range.value)
-)
-let textUnderOver = computed(() => (isUnder.value ? 'Under' : 'Over'))
-
-let probabilityOfWinning = computed(() => {
-  const value = isUnder.value ? parseFloat(range.value) : 100 - parseFloat(range.value)
+const probabilityOfWinning = computed(() => {
+  const value = props.isUnder ? parseFloat(props.range) : 100 - parseFloat(props.range)
   return value.toFixed(2)
 })
 
-let multiplier = computed(() => {
-  return (100 / probabilityOfWinning.value).toFixed(2)
-})
+const win = computed(() =>
+  props.isUnder
+    ? parseFloat(props.result) <= parseFloat(props.range)
+    : parseFloat(props.result) > parseFloat(props.range)
+)
 
-let lastBets = computed(() => {
-  return betsHistory.value.slice(0, 5)
-})
+let lastBets = computed(() => (props.betsHistory ? props.betsHistory : []))
 
-const changeSide = () => {
-  isUnder.value = !isUnder.value
-  result.value = (Math.random() * 100).toFixed(2)
-}
+const changeSide = () => emit('update-isUnder')
 </script>
 
 <style scoped>
@@ -203,6 +186,18 @@ const changeSide = () => {
   position: absolute;
   height: 5rem;
   bottom: 50%;
+  transition:
+    all 300ms ease,
+    opacity 300ms ease;
+  transform-origin: 50% 100%;
+}
+
+.dice.hide {
+  opacity: 0;
+}
+
+.dice.show {
+  opacity: 1;
 }
 
 .dice img {
@@ -226,8 +221,38 @@ const changeSide = () => {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  align-items: center;
   gap: 0.5rem;
   font-size: 0.7rem;
   margin-bottom: 3rem;
+  min-height: 2rem;
+}
+
+.bet-move {
+  transition: transform 0.5s;
+}
+
+.bet-leave-active {
+  transition: all 0.5s;
+}
+
+.bet-leave-to {
+  opacity: 0;
+}
+
+.red-primary {
+  background-color: var(--color-red-primary);
+}
+
+.green-primary {
+  background-color: var(--color-green-primary);
+}
+
+.red {
+  color: var(--color-red-primary);
+}
+
+.green {
+  color: var(--color-green-primary);
 }
 </style>
