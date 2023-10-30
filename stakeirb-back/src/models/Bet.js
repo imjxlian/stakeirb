@@ -1,9 +1,9 @@
 // models/Bet.js
 
-import { DataTypes } from 'sequelize';
+import { DataTypes } from "sequelize";
 
-export default function(sequelize) {
-  const Bet = sequelize.define('Bet', {
+export default function (sequelize) {
+  const Bet = sequelize.define("Bet", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -23,15 +23,18 @@ export default function(sequelize) {
       type: DataTypes.DECIMAL(5, 2),
       allowNull: false,
     },
-    creation_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+    win: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    data: {
+      type: DataTypes.JSON,
     },
   });
 
   Bet.associate = (models) => {
-    Bet.belongsTo(models.User, { foreignKey: 'user_uuid' });
-    Bet.belongsTo(models.Game, { foreignKey: 'game_id' });
+    Bet.belongsTo(models.User, { foreignKey: "user_uuid" });
+    Bet.belongsTo(models.Game, { foreignKey: "game_id" });
   };
 
   return Bet;

@@ -5,8 +5,9 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "format": "prettier --write src/."
   },
   "author": "Julian & Jules",
   "license": "ISC",
@@ -14,6 +15,8 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "faker": "^6.6.6",
+    "prettier": "^3.0.3",
     "sequelize": "^6.33.0",
     "sqlite3": "^5.1.6"
   },
