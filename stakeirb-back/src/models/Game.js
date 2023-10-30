@@ -1,9 +1,9 @@
 // models/Game.js
 
-import { DataTypes } from 'sequelize';
+import { DataTypes } from "sequelize";
 
-export default function(sequelize) {
-  const Game = sequelize.define('Game', {
+export default function (sequelize) {
+  const Game = sequelize.define("Game", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -25,7 +25,7 @@ export default function(sequelize) {
   });
 
   Game.associate = (models) => {
-    Game.hasMany(models.Bets, { foreignKey: 'game_id' });
+    Game.hasMany(models.Bets, { foreignKey: "game_id" });
   };
 
   return Game;

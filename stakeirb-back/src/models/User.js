@@ -1,9 +1,9 @@
 // models/User.js
 
-import { DataTypes } from 'sequelize';
+import { DataTypes } from "sequelize";
 
-export default function(sequelize) {
-  const User = sequelize.define('User', {
+export default function (sequelize) {
+  const User = sequelize.define("User", {
     uuid_user: {
       type: DataTypes.CHAR(36),
       primaryKey: true,
@@ -28,10 +28,6 @@ export default function(sequelize) {
     pfp_url: {
       type: DataTypes.STRING(255),
     },
-    register_date: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-    },
     rank_pts: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
@@ -39,8 +35,8 @@ export default function(sequelize) {
   });
 
   User.associate = (models) => {
-    User.hasMany(models.Bets, { foreignKey: 'user_uuid' });
-    User.hasMany(models.Messages, { foreignKey: 'user_uuid' });
+    User.hasMany(models.Bets, { foreignKey: "user_uuid" });
+    User.hasMany(models.Messages, { foreignKey: "user_uuid" });
   };
 
   return User;

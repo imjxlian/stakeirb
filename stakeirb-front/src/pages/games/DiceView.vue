@@ -48,6 +48,7 @@ import DiceBar from '../../components/DiceBar.vue'
 import InputNumber from '../../components/inputs/InputNumber.vue'
 import InputButton from '../../components/inputs/InputButton.vue'
 import { computed, ref } from 'vue'
+import axios from 'axios';
 
 const MAX_BET_AMOUNT = 1000000
 const MAX_BETS_HISTORY = 5
@@ -106,7 +107,15 @@ async function bet() {
   playSound('../src/assets/sounds/bet.mp3')
   await sleep(200)
 
-  result.value = (Math.random() * 100).toFixed(2)
+  // Make a call with axios
+  let res = await axios.post('http://localhost:3000/games/dice', {
+    is_under: isUnder.value,
+    target: range.value,
+    bet_amount: betAmount.value,
+    user_uuid: "f7e727c6-257d-4f40-8017-52c31f1f82ca" // TODO: Replace by the user id
+  });
+
+  result.value = res.data.data.result;
 
   const won = checkWin()
   const newBet = { id: Date.now(), win: won, result: parseFloat(result.value) }
