@@ -48,7 +48,7 @@ import DiceBar from '../../components/DiceBar.vue'
 import InputNumber from '../../components/inputs/InputNumber.vue'
 import InputButton from '../../components/inputs/InputButton.vue'
 import { computed, ref } from 'vue'
-import axios from 'axios';
+import axios from 'axios'
 
 const MAX_BET_AMOUNT = 1000000
 const MAX_BETS_HISTORY = 5
@@ -112,10 +112,22 @@ async function bet() {
     is_under: isUnder.value,
     target: range.value,
     bet_amount: betAmount.value,
-    user_uuid: "f7e727c6-257d-4f40-8017-52c31f1f82ca" // TODO: Replace by the user id
-  });
+    user_uuid: 'f7e727c6-257d-4f40-8017-52c31f1f82ca' // TODO: Replace by the user id
+  })
 
-  result.value = res.data.data.result;
+  // TODO: Handle errors
+  if (res.data.error) {
+    console.log(res.data.error)
+    return
+  }
+
+  try {
+    result.value = res.data.data.result
+    result.value = parseFloat(result.value).toFixed(2)
+  } catch (e) {
+    console.log(e)
+    return
+  }
 
   const won = checkWin()
   const newBet = { id: Date.now(), win: won, result: parseFloat(result.value) }
