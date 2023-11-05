@@ -23,7 +23,7 @@
         <button class="button success bg-primary-green color-primary-light deposit">+</button>
       </div>
 
-      <div class="flex flex-row right-menu">
+      <div v-if="isLoggedIn" class="flex flex-row right-menu">
         <a class="color-primary-light text-deco-none" href="/profile">
           <div class="flex flex-row username-container">
             <img
@@ -47,12 +47,33 @@
           />
         </a>
       </div>
+
+      <div v-else class="flex flex-row right-menu">
+        <a href="/login" class="login-text">
+          <span>Login</span>
+        </a>
+        <a href="/register">
+          <InputButton
+            :value="'Register'"
+            :type="'success'"
+            :disabled="false"
+            :action="
+              () => {
+                console.log('Logout')
+              }
+            "
+          />
+        </a>
+      </div>
     </div>
   </header>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import InputButton from './inputs/InputButton.vue'
+
+let isLoggedIn = ref(false)
 </script>
 
 <style scoped>
@@ -65,7 +86,7 @@ import InputButton from './inputs/InputButton.vue'
 
 .nav-container {
   grid-template-columns: 1fr auto 1fr;
-  padding: 1rem 2rem;
+  padding: 0.7rem 0;
   gap: 3rem;
 }
 
@@ -132,5 +153,12 @@ import InputButton from './inputs/InputButton.vue'
   margin-right: 0.4rem;
   border-radius: 50%;
   aspect-ratio: 1/1;
+}
+
+.login-text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-text-light);
+  text-decoration: none;
 }
 </style>
