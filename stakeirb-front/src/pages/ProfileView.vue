@@ -20,7 +20,9 @@
           <div>
             <h3>Total Won</h3>
             <div class="text-icon-flex">
-              <span :class="amountWon >= 0 ? 'color-green' : 'color-red'">{{ formattedAmountWon }}</span>
+              <span :class="amountWon >= 0 ? 'color-green' : 'color-red'">{{
+                formattedAmountWon
+              }}</span>
               <CoinIcon />
             </div>
           </div>
@@ -76,33 +78,32 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-import RankBar from '../components/RankBar.vue';
-import CoinIcon from '../components/CoinIcon.vue';
+import RankBar from '../components/RankBar.vue'
+import CoinIcon from '../components/CoinIcon.vue'
 
-const progress = 30;
-const amountWon = 19340;
-const formattedAmountWon = amountWon.toLocaleString('en-US');
+const progress = 30
+const amountWon = 19340
+const formattedAmountWon = amountWon.toLocaleString('en-US')
 
 // The url is like /profile/:uuid_user
 
-const router = useRouter();
+const router = useRouter()
 
-const route = useRoute();
-const user_uuid = route.params.user_uuid;
+const route = useRoute()
+const user_uuid = route.params.user_uuid
 
 const fetchUser = (user_uuid) => {
-  console.log(user_uuid);
+  console.log(user_uuid)
 }
 
 if (user_uuid) {
-  fetchUser(user_uuid);
+  fetchUser(user_uuid)
 } else {
-  router.push('/');
+  router.push('/')
 }
-
 </script>
 
 <style scoped>
@@ -130,15 +131,15 @@ if (user_uuid) {
   font-weight: 500;
 }
 
-.stats-inner>div {
+.stats-inner > div {
   padding: 1rem;
   border-radius: 0.5rem;
   background-color: var(--grey-500);
   margin: 0 1rem;
 }
 
-.stats-inner>div:first-of-type,
-.stats-inner>div:last-of-type {
+.stats-inner > div:first-of-type,
+.stats-inner > div:last-of-type {
   margin: 0;
 }
 
