@@ -16,6 +16,10 @@ defineProps(['value', 'type', 'disabled', 'action'])
   transition: all 0.2s ease-in-out;
 }
 
+.button:focus {
+  outline: 0.2rem solid var(--color-green-tertiary);
+}
+
 .success {
   background-color: var(--color-green-primary);
   color: var(--color-text-light);

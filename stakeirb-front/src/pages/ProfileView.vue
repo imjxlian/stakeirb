@@ -107,6 +107,10 @@ if (user_uuid) {
 </script>
 
 <style scoped>
+.container {
+  padding: var(--padding-container);
+}
+
 .wrapper {
   width: 75%;
   background-color: var(--grey-700);

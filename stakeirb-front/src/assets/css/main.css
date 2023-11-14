@@ -1,12 +1,17 @@
+/* Import fonts */
+@import url('https://fonts.cdnfonts.com/css/metropolis-2');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
+/* Define global variables */
 :root {
   --color-background: #203141;
   --color-background-light: #2c3e50;
   --color-background-dark: #17212a;
+
   --color-text-light: #f8f8f8;
   --color-text-dark: #181818;
   --color-text-mute: #b1bad3;
+
   --color-green-primary: #00b894;
   --color-green-secondary: #00a389;
   --color-green-tertiary: rgb(2, 200, 167);
@@ -34,8 +39,49 @@
   --grey-900: #071824;
 
   --red-500: #e9113c;
-
   --green-500: #00e701;
 
   --btn-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.12);
+
+  --max-width: 1280px;
+  --padding-container: 3rem 1rem;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--grey-600);
+  color: var(--color-text-light);
+  font-family: 'Metropolis', sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.button.success {
+  background-color: var(--color-green-primary);
+  color: var(--color-text-light);
+}
+
+.button.success:hover {
+  background-color: var(--color-green-secondary);
+}
+
+.button.danger {
+  background-color: var(--color-red-primary);
+  color: var(--color-text-light);
+}
+
+.button.danger:hover {
+  background-color: var(--color-red-secondary);
+}
+
+input {
+  border: none;
+  color: var(--color-text-light);
+  font-weight: bold;
+}
+
+input:focus {
+  outline: none;
 }
