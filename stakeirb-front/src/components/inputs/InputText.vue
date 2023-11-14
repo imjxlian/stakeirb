@@ -5,9 +5,10 @@
       <div class="input-inner" :class="{ disabled: disabled }">
         <input
           :type="type || 'text'"
-          :value="value || ''"
+          :value="modelValue || ''"
           :placeholder="placeholder"
           :disabled="disabled"
+          @input="emitUpdate($event.target.value)"
         />
         <img v-if="imageSrc" :src="imageSrc" alt="Button Icon" />
       </div>
@@ -23,15 +24,21 @@
 </template>
 
 <script setup>
-const { type, value, placeholder, disabled, label, imageSrc, actions } = defineProps([
+const emit = defineEmits(['update:modelValue']);
+const { type, placeholder, disabled, label, imageSrc, actions } = defineProps([
   'type',
-  'value',
   'placeholder',
   'disabled',
   'label',
   'imageSrc',
-  'actions'
+  'actions',
+  'modelValue'
 ])
+
+const emitUpdate = (value) => {
+  // Émettre l'événement 'update:modelValue' pour mettre à jour la valeur du modèle parent
+  emit('update:modelValue', value);
+};
 </script>
 
 <style scoped>

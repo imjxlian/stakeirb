@@ -13,7 +13,7 @@
 
       <div class="balance-container">
         <div class="balance-inner">
-          <span class="balance-amount">126,321</span>
+          <span class="balance-amount">{{ balance }}</span>
           <CoinIcon />
         </div>
         <button class="button success deposit-btn">+</button>
@@ -27,7 +27,7 @@
               alt="User profile picture"
               class="user-img"
             />
-            Swarton1
+            {{ username }}
           </div>
         </a>
         <a href="/logout">
@@ -69,8 +69,11 @@
 import { ref } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import CoinIcon from './CoinIcon.vue'
+import {store} from "@/store";
 
-let isLoggedIn = ref(false)
+let isLoggedIn = ref(store.getters.loggedIn)
+const username = ref(store.getters.username)
+const balance = ref(store.getters.balance)
 </script>
 
 <style scoped>

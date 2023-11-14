@@ -68,5 +68,20 @@ export default function (User) {
     }
   });
 
+  //Log a user
+  router.post('/login', async (req, res) => {
+    const { email, hashedPassword: password } = req.body;
+    try {
+      const user = await User.findOne({ where: { email, password } });
+      if (user !== null) {
+        res.status(200).send(user);
+      } else {
+        res.status(403).send('Connexion impossible');
+      }
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  });
+
   return router;
 }
