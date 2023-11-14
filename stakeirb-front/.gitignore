@@ -8,7 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-package-lock.json
 .DS_Store
 dist
 dist-ssr
@@ -19,6 +18,7 @@ coverage
 /cypress/screenshots/
 
 # Editor directories and files
+.vscode
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -27,3 +27,6 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# Database file (sqlite)
+stakeirb-database.db
