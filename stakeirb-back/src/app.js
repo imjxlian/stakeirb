@@ -50,6 +50,9 @@ const hydrateDatabase = async () => {
       password:
         "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
       uuid_user: uuidv4(),
+      balance: 1000,
+      pfp_url: "https://i.imgur.com/0y8Ftya.png",
+      rank_pts: 70,
     });
 
     const user2 = await User.create({
@@ -58,6 +61,9 @@ const hydrateDatabase = async () => {
       password:
         "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
       uuid_user: uuidv4(),
+      balance: 2000,
+      pfp_url: "https://i.imgur.com/0y8Ftya.png",
+      rank_pts: 40,
     });
 
     const game1 = await Game.create({

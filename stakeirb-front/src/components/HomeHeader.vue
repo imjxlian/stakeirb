@@ -1,14 +1,9 @@
-<script setup>
-import GameCard from './GameCard.vue'
-import RankBar from './RankBar.vue'
-</script>
-
 <template>
   <div class="container">
     <div class="wrapper">
       <div class="grid">
         <div>
-          <h3 class="welcome-msg">Welcome swarton1, what are we playing today ?</h3>
+          <h3 class="welcome-msg">Welcome {{ username }}, what are we playing today ?</h3>
           <RankBar class="rank-bar" :progress="progress" />
           <div class="games">
             <GameCard v-for="game in games" :key="game" :game="game" />
@@ -20,10 +15,18 @@ import RankBar from './RankBar.vue'
   </div>
 </template>
 
-<script>
-const games = ['dice', 'mines', 'plinko', 'roulette']
+<script setup>
+import GameCard from './GameCard.vue'
+import RankBar from './RankBar.vue'
+import {useStore} from "vuex";
+import {computed} from "vue";
 
-const progress = 30
+const store = useStore();
+
+
+const games = ['dice', 'mines', 'plinko', 'roulette']
+const username = computed(() => store.getters.username)
+const progress = computed(() => store.getters.rank_pts)
 </script>
 
 <style scoped>
