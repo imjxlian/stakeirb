@@ -1,6 +1,6 @@
 <template>
-  <div class="bar-container bg-primary-light">
-    <div class="progress-bar bg-primary-green" :style="{ width: progress + '%' }"></div>
+  <div class="bar-container">
+    <div class="progress-bar" :style="{ width: progress + '%' }"></div>
   </div>
 </template>
 
@@ -14,11 +14,13 @@ defineProps(['progress'])
   border-radius: 1rem;
   overflow: hidden;
   position: relative;
+  background-color: var(--color-background-light);
 }
 
 .progress-bar {
   height: 1rem;
   text-align: right;
   z-index: 1;
+  background-color: var(--color-green-primary);
 }
 </style>

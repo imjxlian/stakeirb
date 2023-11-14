@@ -1,7 +1,7 @@
 <template>
   <header class="menu-container">
     <div class="grid wrapper nav-container">
-      <div class="flex flex-row logo-container">
+      <div class="logo-container">
         <a href="/">
           <img
             src="../assets/images/logos/logo-stakeirb-light.png"
@@ -11,21 +11,17 @@
         </a>
       </div>
 
-      <div class="flex flex-row bg-primary-dark balance-container">
-        <div class="flex flex-row balance-inner">
+      <div class="balance-container">
+        <div class="balance-inner">
           <span class="balance-amount">126,321</span>
-          <img
-            src="../assets/images/icons/coineirb.png"
-            alt="Coineirb logo"
-            class="currency-icon"
-          />
+          <CoinIcon />
         </div>
-        <button class="button success bg-primary-green color-primary-light deposit">+</button>
+        <button class="button success deposit-btn">+</button>
       </div>
 
-      <div v-if="isLoggedIn" class="flex flex-row right-menu">
-        <a class="color-primary-light text-deco-none" href="/profile">
-          <div class="flex flex-row username-container">
+      <div v-if="isLoggedIn" class="right-menu">
+        <a class="profile-link" href="/profile">
+          <div class="username-container">
             <img
               src="../assets/images/users/default-user-img.svg"
               alt="User profile picture"
@@ -48,7 +44,7 @@
         </a>
       </div>
 
-      <div v-else class="flex flex-row right-menu">
+      <div v-else class="right-menu">
         <a href="/login" class="login-text">
           <span>Login</span>
         </a>
@@ -72,6 +68,7 @@
 <script setup>
 import { ref } from 'vue'
 import InputButton from './inputs/InputButton.vue'
+import CoinIcon from './CoinIcon.vue'
 
 let isLoggedIn = ref(false)
 </script>
@@ -82,6 +79,16 @@ let isLoggedIn = ref(false)
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 2;
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
 }
 
 .nav-container {
@@ -95,21 +102,26 @@ let isLoggedIn = ref(false)
 }
 
 .balance-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  gap: 1rem;
   justify-content: space-between;
   align-items: center;
+  background-color: var(--color-background-dark);
   padding: 0.5rem 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   font-size: 1rem;
   font-weight: bold;
   border-radius: 1rem;
-  flex-grow: 0;
-  gap: 1rem;
 }
 
 .balance-inner {
   gap: 0.3rem;
   justify-content: center;
   align-items: center;
+  display: flex;
+  flex-direction: row;
 }
 
 .balance-amount {
@@ -119,13 +131,16 @@ let isLoggedIn = ref(false)
 .logo-container {
   align-items: center;
   justify-content: flex-start;
+  display: flex;
 }
 
 .logo {
   height: 2rem;
 }
 
-.deposit {
+.deposit-btn {
+  background-color: var(--color-green-primary);
+  color: var(--color-text-light);
   border: none;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -133,6 +148,9 @@ let isLoggedIn = ref(false)
 }
 
 .right-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
   align-items: center;
   justify-content: flex-end;
   padding: 0.5rem 1rem;
@@ -143,6 +161,8 @@ let isLoggedIn = ref(false)
 }
 
 .username-container {
+  display: flex;
+  flex-direction: row;
   gap: 0.3rem;
   align-items: center;
   justify-content: space-between;
@@ -160,5 +180,10 @@ let isLoggedIn = ref(false)
   font-weight: bold;
   color: var(--color-text-light);
   text-decoration: none;
+}
+
+.profile-link {
+  text-decoration: none;
+  color: var(--color-text-light);
 }
 </style>

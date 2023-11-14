@@ -177,6 +177,10 @@ function animateDiceRoll() {
 </script>
 
 <style scoped>
+.container {
+  padding: var(--padding-container);
+}
+
 .container .wrapper .card {
   display: flex;
   flex-direction: row;
@@ -186,6 +190,11 @@ function animateDiceRoll() {
   border-radius: 0.5rem;
   gap: 0;
   overflow: hidden;
+}
+
+.wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
 }
 
 .card-left {

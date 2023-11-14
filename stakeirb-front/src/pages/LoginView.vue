@@ -38,7 +38,13 @@ let username = ''
 let password = ''
 </script>
 <style scoped>
+.container {
+  padding: var(--padding-container);
+}
+
 .wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
   width: 75%;
   background-color: var(--grey-700);
   padding: 2rem;

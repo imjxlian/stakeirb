@@ -1,24 +1,20 @@
 <script setup>
-import RankBar from './RankBar.vue'
 import GameCard from './GameCard.vue'
+import RankBar from './RankBar.vue'
 </script>
 
 <template>
-  <div class="bg-primary-dark">
+  <div class="container">
     <div class="wrapper">
       <div class="grid">
         <div>
-          <h3 class="mt-0">Welcome swarton1, what are we playing today ?</h3>
-          <RankBar class="w-75" :progress="progress" />
-          <div class="flex flex-row games">
+          <h3 class="welcome-msg">Welcome swarton1, what are we playing today ?</h3>
+          <RankBar class="rank-bar" :progress="progress" />
+          <div class="games">
             <GameCard v-for="game in games" :key="game" :game="game" />
           </div>
         </div>
-        <img
-          src="../assets/images/elon-musk-image.png"
-          alt="Elon Musk"
-          class="image m-auto w-100"
-        />
+        <img src="../assets/images/elon-musk-image.png" alt="Elon Musk" class="home-image" />
       </div>
     </div>
   </div>
@@ -31,23 +27,45 @@ const progress = 30
 </script>
 
 <style scoped>
+.container {
+  background-color: var(--color-background-dark);
+  padding: var(--padding-container);
+}
+
 .wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
   padding: 3rem 2rem;
 }
 
 .grid {
+  display: grid;
+  gap: 2rem;
   grid-template-columns: 3fr 2fr;
 }
 
-.image {
+.welcome-msg {
+  margin-top: 0;
+}
+
+.home-image {
   object-fit: cover;
   border-radius: 1rem;
+  width: 100%;
+  margin: auto;
 }
 
 .games {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
   margin-top: 2rem;
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
+}
+
+.rank-bar {
+  width: 75%;
 }
 </style>
