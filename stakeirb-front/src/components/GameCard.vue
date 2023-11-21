@@ -1,9 +1,9 @@
 <template>
-  <a :href="'/games/' + game">
+  <router-link :to="'/games/' + game">
     <div class="card">
       <img :src="getImagePath()" :alt="game" class="card-image" />
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script setup>

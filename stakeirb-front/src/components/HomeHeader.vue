@@ -30,6 +30,7 @@ const progress = 30
 .container {
   background-color: var(--color-background-dark);
   padding: var(--padding-container);
+  height: 10000px; /* Temporary */
 }
 
 .wrapper {

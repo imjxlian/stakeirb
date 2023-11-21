@@ -45,6 +45,8 @@
 
   --max-width: 1280px;
   --padding-container: 3rem 1rem;
+
+  --width-online-chat: 470px;
 }
 
 html,

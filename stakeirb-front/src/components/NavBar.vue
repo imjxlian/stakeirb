@@ -2,13 +2,13 @@
   <header class="menu-container">
     <div class="grid wrapper nav-container">
       <div class="logo-container">
-        <a href="/">
+        <router-link to="/">
           <img
             src="../assets/images/logos/logo-stakeirb-light.png"
             alt="Stak'Eirb logo"
             class="logo"
           />
-        </a>
+        </router-link>
       </div>
 
       <div class="balance-container">
@@ -20,7 +20,7 @@
       </div>
 
       <div v-if="isLoggedIn" class="right-menu">
-        <a class="profile-link" href="/profile">
+        <router-link to="/profile" class="profile-link">
           <div class="username-container">
             <img
               src="../assets/images/users/default-user-img.svg"
@@ -29,8 +29,8 @@
             />
             Swarton1
           </div>
-        </a>
-        <a href="/logout">
+        </router-link>
+        <router-link to="/logout">
           <InputButton
             :value="'Logout'"
             :type="'danger'"
@@ -41,14 +41,14 @@
               }
             "
           />
-        </a>
+        </router-link>
       </div>
 
       <div v-else class="right-menu">
-        <a href="/login" class="login-text">
+        <router-link to="/login" class="login-text">
           <span>Login</span>
-        </a>
-        <a href="/register">
+        </router-link>
+        <router-link to="/register">
           <InputButton
             :value="'Register'"
             :type="'success'"
@@ -59,7 +59,7 @@
               }
             "
           />
-        </a>
+        </router-link>
       </div>
     </div>
   </header>
@@ -75,10 +75,13 @@ let isLoggedIn = ref(false)
 
 <style scoped>
 .menu-container {
-  background-color: transparent;
+  background-color: var(--grey-600);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 2;
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 
 .grid {
@@ -93,7 +96,7 @@ let isLoggedIn = ref(false)
 
 .nav-container {
   grid-template-columns: 1fr auto 1fr;
-  padding: 0.7rem 0;
+  padding: 0.7rem 3rem;
   gap: 3rem;
 }
 

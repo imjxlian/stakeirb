@@ -106,11 +106,37 @@ const hydrateDatabase = async () => {
 
 hydrateDatabase();
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log("*-- Serveur démarré (port 3000) --*");
 });
 
 // Listen to / route
 app.get("/", (req, res) => {
   res.send("*-- Welcome to Stak'Eirb API --*");
+});
+
+import { Server } from "socket.io";
+const io = new Server(server, {
+  cors: { origin: ["http://localhost:5173", "http://127.0.0.1:5173"] },
+});
+
+let usersOnline = [];
+
+io.on("connection", (socket) => {
+  if (!usersOnline.includes(socket.id)) {
+    usersOnline.push(socket.id);
+  }
+
+  io.emit("usersOnline", usersOnline.length);
+
+  // Handle disconnection
+  socket.on("disconnect", () => {
+    usersOnline = usersOnline.filter((user) => user !== socket.id);
+    io.emit("usersOnline", usersOnline.length);
+  });
+
+  // Handle new message
+  socket.on("newMessage", (message) => {
+    io.emit("newMessage", message);
+  });
 });
