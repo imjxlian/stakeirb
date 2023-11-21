@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import {store} from "@/store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,8 +33,24 @@ const router = createRouter({
       path: '/games/mines',
       name: 'mines',
       component: () => import('../pages/Games/MinesView.vue')
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      beforeEnter: (to, from, next) => {
+        // Clear local storage and store variables
+        clearLocalStorageAndStoreVariables();
+
+        // Navigate to home
+        next({name: 'home'});
+      }
     }
   ]
 })
+
+function clearLocalStorageAndStoreVariables() {
+  localStorage.clear();
+  store.commit('logout');
+}
 
 export default router

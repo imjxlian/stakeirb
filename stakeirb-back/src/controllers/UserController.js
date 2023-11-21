@@ -6,10 +6,15 @@ const router = express.Router();
 
 export default function (User) {
   // Create a user
-  router.post("/", async (req, res) => {
+  router.post("/register", async (req, res) => {
+    const { username, email, hashedPassword } = req.body;
     try {
-      const user = await User.create(req.body);
-      res.json(user);
+      const user = await User.create({
+          username,
+          email,
+          password: hashedPassword,
+      });
+      res.status(200).send(user);
     } catch (error) {
       console.error("An error occurred:", error);
       res.status(500).send("An error occurred");

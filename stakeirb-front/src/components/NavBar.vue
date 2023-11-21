@@ -13,7 +13,8 @@
 
       <div class="balance-container">
         <div class="balance-inner">
-          <span class="balance-amount">{{ balance }}</span>
+          <span v-if="isLoggedIn" class="balance-amount">{{ balance }}</span>
+          <span v-else class="balance-amount">0</span>
           <CoinIcon />
         </div>
         <button class="button success deposit-btn">+</button>
@@ -35,11 +36,6 @@
             :value="'Logout'"
             :type="'danger'"
             :disabled="false"
-            :action="
-              () => {
-                console.log('Logout')
-              }
-            "
           />
         </a>
       </div>
@@ -53,11 +49,6 @@
             :value="'Register'"
             :type="'success'"
             :disabled="false"
-            :action="
-              () => {
-                console.log('Logout')
-              }
-            "
           />
         </a>
       </div>
@@ -66,14 +57,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {computed} from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import CoinIcon from './CoinIcon.vue'
 import {store} from "@/store";
 
-let isLoggedIn = ref(store.getters.loggedIn)
-const username = ref(store.getters.username)
-const balance = ref(store.getters.balance)
+const isLoggedIn = computed(() => store.getters.loggedIn)
+const username = computed(() => store.getters.username)
+const balance = computed(() => store.getters.balance)
 </script>
 
 <style scoped>
