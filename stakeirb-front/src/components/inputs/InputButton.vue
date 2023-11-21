@@ -1,5 +1,5 @@
 <template>
-  <input type="button" class="button" :class="type" :value="value" @click="action" />
+  <input type="submit" class="button" :class="type" :value="value" @click="action" />
 </template>
 
 <script setup>

@@ -3,11 +3,11 @@
     <div class="wrapper">
       <div class="content">
         <h1 class="login-title">Register</h1>
-        <form>
+        <form @submit.prevent="registerUser">
           <InputText
             class="mb"
             :placeholder="placeholderUsername"
-            :value="username"
+            v-model="form.username"
             label="Username"
             :disabled="false"
             :actions="[]"
@@ -16,7 +16,7 @@
             class="mb"
             :type="'email'"
             :placeholder="placeholderEmail"
-            :value="email"
+            v-model="form.email"
             label="E-mail"
             :disabled="false"
             :actions="[]"
@@ -25,7 +25,7 @@
             class="mb"
             :type="'password'"
             :placeholder="placeholderPassword"
-            :value="password"
+            v-model="form.password"
             label="Password"
             :disabled="false"
             :actions="[]"
@@ -40,13 +40,31 @@
 <script setup>
 import InputButton from '../components/inputs/InputButton.vue'
 import InputText from '../components/inputs/InputText.vue'
+import {reactive} from "vue";
+import {sha256} from "js-sha256";
+import axios from "axios";
+import router from "@/router";
+import {store} from "@/store";
 
 const placeholderUsername = 'TheKing123'
 const placeholderEmail = 'email@example.com'
 const placeholderPassword = 'YourSecretPassword'
-let username = ''
-let email = ''
-let password = ''
+const form = reactive({username: '', email: '', password: '' });
+
+const registerUser = async () => {
+  const {username, email, password} = form;
+  const hashedPassword = sha256(password);
+
+  try {
+    axios.post('http://localhost:3000/users/register', {username, email, hashedPassword}).then(r =>
+        store.dispatch('login', r.data)
+    );
+    await router.push('/');
+  } catch (e) {
+    console.log(e)
+  }
+
+}
 </script>
 <style scoped>
 .container {
