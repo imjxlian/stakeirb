@@ -3,9 +3,11 @@
     <div class="wrapper">
       <div class="grid">
         <div>
-          <h3 v-if="isLoggedIn" class="welcome-msg">Welcome {{ username }}, what are we playing today ?</h3>
+          <h3 v-if="isLoggedIn" class="welcome-msg">
+            Welcome {{ username }}, what are we playing today ?
+          </h3>
           <h3 v-else class="welcome-msg">Welcome, please connect yourself in order to play!</h3>
-          <RankBar class="rank-bar" :progress="progress" v-if="isLoggedIn"/>
+          <RankBar class="rank-bar" :progress="progress" v-if="isLoggedIn" />
           <div class="games">
             <GameCard v-for="game in games" :key="game" :game="game" />
           </div>
@@ -19,10 +21,10 @@
 <script setup>
 import GameCard from './GameCard.vue'
 import RankBar from './RankBar.vue'
-import {useStore} from "vuex";
-import {computed} from "vue";
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
-const store = useStore();
+const store = useStore()
 
 const games = ['dice', 'mines', 'plinko', 'roulette']
 const isLoggedIn = computed(() => store.getters.loggedIn)
@@ -34,6 +36,7 @@ const progress = computed(() => store.getters.rank_pts)
 .container {
   background-color: var(--color-background-dark);
   padding: var(--padding-container);
+  height: 10000px; /* Temporary */
 }
 
 .wrapper {

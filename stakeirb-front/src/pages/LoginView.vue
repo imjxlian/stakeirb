@@ -21,7 +21,7 @@
             :disabled="false"
             :actions="[]"
           />
-          <InputButton class="submit-btn mt" :type="'success'" :value="'Login'"/>
+          <InputButton class="submit-btn mt" :type="'success'" :value="'Login'" />
         </form>
       </div>
     </div>
@@ -31,24 +31,25 @@
 <script setup>
 import InputButton from '../components/inputs/InputButton.vue'
 import InputText from '../components/inputs/InputText.vue'
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import axios from 'axios';
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import axios from 'axios'
 
-const placeholderEmail = 'email'
-const placeholderPassword = 'password'
 import { sha256 } from 'js-sha256';
 import Swal from "sweetalert2";
 
-const router = useRouter();
-const store = useStore();
+const placeholderEmail = 'email'
+const placeholderPassword = 'password'
 
-const form = reactive({ email: '', password: '' });
+const router = useRouter()
+const store = useStore()
+
+const form = reactive({ email: '', password: '' })
 
 const userLogin = async () => {
-  const { email, password } = form;
-  const hashedPassword = sha256(password);
+  const { email, password } = form
+  const hashedPassword = sha256(password)
 
   try {
     // Do a POST request to the server

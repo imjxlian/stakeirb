@@ -40,21 +40,22 @@
 <script setup>
 import InputButton from '../components/inputs/InputButton.vue'
 import InputText from '../components/inputs/InputText.vue'
-import {reactive} from "vue";
-import {sha256} from "js-sha256";
-import axios from "axios";
-import router from "@/router";
-import {store} from "@/store";
+
+import { reactive } from 'vue'
+import { sha256 } from 'js-sha256'
+import axios from 'axios'
+import router from '@/router'
+import { store } from '@/store'
 import Swal from "sweetalert2";
 
 const placeholderUsername = 'TheKing123'
 const placeholderEmail = 'email@example.com'
 const placeholderPassword = 'YourSecretPassword'
-const form = reactive({username: '', email: '', password: '' });
+const form = reactive({ username: '', email: '', password: '' })
 
 const registerUser = async () => {
-  const {username, email, password} = form;
-  const hashedPassword = sha256(password);
+  const { username, email, password } = form
+  const hashedPassword = sha256(password)
 
   try {
     const response = await axios.post('http://localhost:3000/users/register', {username, email, hashedPassword});
@@ -74,7 +75,6 @@ const registerUser = async () => {
       color: '#ffffff',
     });
   }
-
 }
 </script>
 <style scoped>

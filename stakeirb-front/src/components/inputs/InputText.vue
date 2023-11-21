@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue'])
 const { type, placeholder, disabled, label, imageSrc, actions } = defineProps([
   'type',
   'placeholder',
@@ -36,9 +36,8 @@ const { type, placeholder, disabled, label, imageSrc, actions } = defineProps([
 ])
 
 const emitUpdate = (value) => {
-  // Émettre l'événement 'update:modelValue' pour mettre à jour la valeur du modèle parent
-  emit('update:modelValue', value);
-};
+  emit('update:modelValue', value)
+}
 </script>
 
 <style scoped>
