@@ -32,11 +32,7 @@
           </div>
         </router-link>
         <router-link to="/logout">
-          <InputButton
-            :value="'Logout'"
-            :type="'danger'"
-            :disabled="false"
-          />
+          <InputButton :value="'Logout'" :type="'danger'" :disabled="false" />
         </router-link>
       </div>
 
@@ -45,11 +41,7 @@
           <span>Login</span>
         </router-link>
         <router-link to="/register">
-          <InputButton
-            :value="'Register'"
-            :type="'success'"
-            :disabled="false"
-          />
+          <InputButton :value="'Register'" :type="'success'" :disabled="false" />
         </router-link>
       </div>
     </div>
@@ -57,10 +49,10 @@
 </template>
 
 <script setup>
-import {computed} from 'vue'
+import { computed } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import CoinIcon from './CoinIcon.vue'
-import {store} from "@/store";
+import { store } from '@/store'
 
 const isLoggedIn = computed(() => store.getters.loggedIn)
 const username = computed(() => store.getters.username)

@@ -2,11 +2,14 @@
 
 import express from "express";
 
+import { Server } from "socket.io";
+
 const router = express.Router();
 
-export default function (Message) {
+export default function (Message, User, io) {
   // Create a message
   router.post("/", async (req, res) => {
+
     try {
       const { user_uuid, message } = req.body;
 
@@ -26,6 +29,20 @@ export default function (Message) {
       };
 
       const response = await Message.create(newMessage);
+
+      if (!response) {
+        return res.status(500).send("An error occurred");
+      }
+
+      const user = await User.findOne({ where: { uuid_user: user_uuid } });
+
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      newMessage.user = user;
+
+      io.emit("newMessage", newMessage);
 
       res.status(201).json(response);
     } catch (error) {

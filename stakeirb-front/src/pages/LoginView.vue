@@ -21,7 +21,7 @@
             :disabled="false"
             :actions="[]"
           />
-          <InputButton class="submit-btn mt" :type="'success'" :value="'Login'"/>
+          <InputButton class="submit-btn mt" :type="'success'" :value="'Login'" />
         </form>
       </div>
     </div>
@@ -31,33 +31,33 @@
 <script setup>
 import InputButton from '../components/inputs/InputButton.vue'
 import InputText from '../components/inputs/InputText.vue'
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import axios from 'axios';
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import axios from 'axios'
 
 const placeholderEmail = 'email'
 const placeholderPassword = 'password'
-import { sha256 } from 'js-sha256';
+import { sha256 } from 'js-sha256'
 
-const router = useRouter();
-const store = useStore();
+const router = useRouter()
+const store = useStore()
 
-const form = reactive({ email: '', password: '' });
+const form = reactive({ email: '', password: '' })
 
 const userLogin = async () => {
-  const { email, password } = form;
-  const hashedPassword = sha256(password);
+  const { email, password } = form
+  const hashedPassword = sha256(password)
 
   try {
-    axios.post('http://localhost:3000/users/login', {email, hashedPassword}).then(r =>
-      store.dispatch('login', r.data)
-    );
-    await router.push('/');
+    axios
+      .post('http://localhost:3000/users/login', { email, hashedPassword })
+      .then((r) => store.dispatch('login', r.data))
+    await router.push('/')
   } catch (e) {
     console.log(e)
   }
-};
+}
 </script>
 <style scoped>
 .container {

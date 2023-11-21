@@ -30,13 +30,6 @@ const Game = createGameModel(sequelize);
 const Bets = createBetsModel(sequelize);
 const Messages = createMessagesModel(sequelize);
 
-// Associez les contrôleurs aux routes
-app.use("/users", userController(User));
-app.use("/games", gameController(Game));
-app.use("/bets", betsController(Bets));
-app.use("/messages", messagesController(Messages));
-app.use("/games/dice", DiceController(Bets));
-
 // Hydratez la base de données avec des données réalistes
 const hydrateDatabase = async () => {
   try {
@@ -49,7 +42,7 @@ const hydrateDatabase = async () => {
       email: "alice@example.com",
       password:
         "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-      uuid_user: uuidv4(),
+      uuid_user: "f7e727c6-257d-4f40-8017-52c31f1f82ca",
       balance: 1000,
       pfp_url: "https://i.imgur.com/0y8Ftya.png",
       rank_pts: 70,
@@ -128,6 +121,13 @@ const io = new Server(server, {
 
 let usersOnline = [];
 
+// Associez les contrôleurs aux routes
+app.use("/users", userController(User));
+app.use("/games", gameController(Game));
+app.use("/bets", betsController(Bets));
+app.use("/messages", messagesController(Messages, User, io));
+app.use("/games/dice", DiceController(Bets));
+
 io.on("connection", (socket) => {
   if (!usersOnline.includes(socket.id)) {
     usersOnline.push(socket.id);
@@ -139,10 +139,5 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     usersOnline = usersOnline.filter((user) => user !== socket.id);
     io.emit("usersOnline", usersOnline.length);
-  });
-
-  // Handle new message
-  socket.on("newMessage", (message) => {
-    io.emit("newMessage", message);
   });
 });

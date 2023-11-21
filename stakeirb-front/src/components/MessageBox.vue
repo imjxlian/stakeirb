@@ -4,7 +4,7 @@
       <img class="user-img" :src="message.user.pfp_url" alt="" />
       <span class="user-name">{{ message.user.username }}</span>
     </div>
-    <span class="message">{{ message.value }}</span>
+    <span class="message">{{ message.message }}</span>
   </div>
 </template>
 

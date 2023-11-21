@@ -9,100 +9,58 @@
     <div class="messages-container">
       <MessageBox v-for="message in messages" :key="message.id" :message="message" />
     </div>
-    <div class="messages-controls">
-      <InputText placeholder="Type your message here..." :action="() => {}" class="message-input" />
-      <InputButton value="Send" type="success" :action="sendMessage" />
-    </div>
+    <form class="messages-controls" @submit.prevent="sendMessage">
+      <InputText placeholder="Type your message here..." v-model="currentMessage" class="message-input" />
+      <InputButton value="Send" type="success" />
+    </form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import InputText from './inputs/InputText.vue'
 import MessageBox from './MessageBox.vue'
 import { useSocket } from '../socket'
+import { useStore } from 'vuex'
+
+import axios from 'axios'
+
+const store = useStore()
+
+const user_uuid = computed(() => store.getters.uuid_user);
 
 useSocket().socket.on('usersOnline', (count) => {
   onlineCount.value = count;
 })
 
 useSocket().socket.on('newMessage', (message) => {
-  if (messages.length > 100) {
-    messages.shift()
+  if (messages.value.length > 100) {
+    messages.value.shift();
   }
-  messages.push(message)
-})
+  messages.value.push(message);
 
+});
+
+const currentMessage = ref('')
 let onlineCount = ref(0)
 
-const messages = [
-  {
-    id: 1,
-    user: {
-      uuid_user: 1,
-      username: 'Swarton1',
-      pfp_url: '../src/assets/images/users/default-user-img.svg'
-    },
-    value: 'Je suis là'
-  },
-  {
-    id: 2,
-    user: {
-      uuid_user: 2,
-      username: 'TodoniK',
-      pfp_url: '../src/assets/images/users/doge-une.jpeg'
-    },
-    value: 'Ça va?'
-  },
-  {
-    id: 3,
-    user: {
-      uuid_user: 1,
-      username: 'Swarton1',
-      pfp_url: '../src/assets/images/users/default-user-img.svg'
-    },
-    value: 'Je suis là'
-  },
-  {
-    id: 4,
-    user: {
-      uuid_user: 1,
-      username: 'Swarton1',
-      pfp_url: '../src/assets/images/users/default-user-img.svg'
-    },
-    value: 'Je suis là'
-  },
-  {
-    id: 5,
-    user: {
-      uuid_user: 1,
-      username: 'Swarton1',
-      pfp_url: '../src/assets/images/users/default-user-img.svg'
-    },
-    value: 'Je suis là'
-  },
-  {
-    id: 6,
-    user: {
-      uuid_user: 1,
-      username: 'Swarton',
-      pfp_url: '../src/assets/images/users/default-user-img.svg'
-    },
-    value: 'Imagine ça marche ?'
-  }
-]
+const messages = ref([])
 
-const sendMessage = () => {
-
+const sendMessage = async () => {
   const message = {
-    uuid_user: 1,
-    value: messageValue
+    user_uuid: user_uuid.value,
+    message: currentMessage.value
   }
 
-  console.log(message);
+  try {
+    // Appel à l'API pour envoyer le message
+    await axios.post('http://localhost:3000/messages', message);
+    currentMessage.value = '';
 
-  useSocket().socket.emit('sendMessage', message);
+  } catch (error) {
+    console.error('Error sending message:', error);
+  }
 }
 </script>
 
