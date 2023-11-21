@@ -17,7 +17,7 @@ export default function (User) {
       res.status(200).send(user);
     } catch (error) {
       console.error("An error occurred:", error);
-      res.status(500).send("An error occurred");
+      res.status(500).send("User already exists");
     }
   });
 
@@ -81,7 +81,7 @@ export default function (User) {
       if (user !== null) {
         res.status(200).send(user);
       } else {
-        res.status(403).send('Connexion impossible');
+        res.status(403).send('Incorrect email or password');
       }
     } catch (err) {
       return res.status(500).json({ message: err.message });

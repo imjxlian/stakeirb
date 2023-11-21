@@ -40,11 +40,13 @@
 <script setup>
 import InputButton from '../components/inputs/InputButton.vue'
 import InputText from '../components/inputs/InputText.vue'
+
 import { reactive } from 'vue'
 import { sha256 } from 'js-sha256'
 import axios from 'axios'
 import router from '@/router'
 import { store } from '@/store'
+import Swal from "sweetalert2";
 
 const placeholderUsername = 'TheKing123'
 const placeholderEmail = 'email@example.com'
@@ -56,12 +58,22 @@ const registerUser = async () => {
   const hashedPassword = sha256(password)
 
   try {
-    axios
-      .post('http://localhost:3000/users/register', { username, email, hashedPassword })
-      .then((r) => store.dispatch('login', r.data))
-    await router.push('/')
+    const response = await axios.post('http://localhost:3000/users/register', {username, email, hashedPassword});
+    await store.dispatch('login', response.data);
+    await router.push('/');
   } catch (e) {
-    console.log(e)
+    await Swal.fire({
+      icon: 'error',
+      toast: true,
+      position: 'bottom',
+      title: 'Oops...',
+      text: e.response.data,
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: '#203141',
+      color: '#ffffff',
+    });
   }
 }
 </script>

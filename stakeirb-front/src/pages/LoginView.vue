@@ -36,9 +36,11 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import axios from 'axios'
 
+import { sha256 } from 'js-sha256';
+import Swal from "sweetalert2";
+
 const placeholderEmail = 'email'
 const placeholderPassword = 'password'
-import { sha256 } from 'js-sha256'
 
 const router = useRouter()
 const store = useStore()
@@ -50,14 +52,27 @@ const userLogin = async () => {
   const hashedPassword = sha256(password)
 
   try {
-    axios
-      .post('http://localhost:3000/users/login', { email, hashedPassword })
-      .then((r) => store.dispatch('login', r.data))
-    await router.push('/')
+    // Do a POST request to the server
+    const response = await axios.post('http://localhost:3000/users/login', { email, hashedPassword });
+
+    // If request is successful, store the user in the store and redirect to home page
+    await store.dispatch('login', response.data);
+    await router.push('/');
   } catch (e) {
-    console.log(e)
-  }
-}
+      await Swal.fire({
+        icon: 'error',
+        toast: true,
+        position: 'bottom',
+        title: 'Oops...',
+        text: e.response.data,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#203141',
+        color: '#ffffff',
+      });
+    }
+};
 </script>
 <style scoped>
 .container {
