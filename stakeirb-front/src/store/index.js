@@ -27,6 +27,6 @@ export const store = createStore({
   },
   getters: {
     loggedIn: (state) => state.loggedIn,
-    user: (state) => state.user,
+    user: (state) => state.user
   }
 })

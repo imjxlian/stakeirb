@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://localhost:3000'
 
 const refreshToken = async () => {
   try {
@@ -33,11 +33,11 @@ axios.interceptors.request.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
-      const res = await refreshToken();
+      const res = await refreshToken()
       if (res.data.success) {
-        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('accessToken', res.data.accessToken)
 
-        return axios(originalRequest);
+        return axios(originalRequest)
       }
     }
 

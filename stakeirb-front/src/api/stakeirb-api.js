@@ -1,5 +1,9 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { useStore } from 'vuex'
+import VueJwtDecode from 'vue-jwt-decode';
+
+const store = useStore()
 
 const API_URL = 'http://localhost:3000'
 const USERS_URL = `${API_URL}/users`
@@ -31,10 +35,16 @@ export const deleteUser = async (id) => {
 
 export const useLogin = async (user) => {
   try {
-    const response = await axios.post(`${API_URL}/users/login`, user)
+    const response = await axios.post(`${USERS_URL}/login`, user)
     localStorage.setItem('accessToken', response.data.accessToken)
-    return response.data
+    // Decode JWT token to get user infos
+    const decodedToken = VueJwtDecode.decode(response.data.accessToken)
+    console.log(decodedToken);
+    // Store user infos in store
+    
+    return true
   } catch (e) {
+    console.error(e)
     await Swal.fire({
       icon: 'error',
       toast: true,
@@ -47,6 +57,7 @@ export const useLogin = async (user) => {
       background: '#203141',
       color: '#ffffff'
     })
+    return false
   }
 }
 
@@ -60,11 +71,11 @@ export const useRegister = async (user) => {
   }
 }
 
-export const getUserInfos = async () => {
+export const fetchUserInfos = async () => {
   try {
-    const response = await axios.get(`${USERS_URL}/users`)
+    const response = await axios.get(`${API_URL}/users/profile`)
     // Store user infos in store
-    
+    store.dispatch('login', response.data)
     return response.data
   } catch (e) {
     console.error(e)

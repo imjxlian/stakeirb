@@ -31,19 +31,16 @@
 <script setup>
 import InputButton from '../components/inputs/InputButton.vue'
 import InputText from '../components/inputs/InputText.vue'
-import Swal from 'sweetalert2'
 
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { useLogin, getUserInfos } from '../api/stakeirb-api'
+import { useLogin, fetchUserInfos } from '../api/stakeirb-api'
 import { sha256 } from 'js-sha256'
 
 const placeholderEmail = 'email'
 const placeholderPassword = 'password'
 
 const router = useRouter()
-const store = useStore()
 
 const form = reactive({ email: '', password: '' })
 
@@ -52,12 +49,15 @@ const userLogin = async () => {
   const hashedPassword = sha256(password)
 
   const user = {
-    "email": email,
-    "password": hashedPassword
+    email: email,
+    password: hashedPassword
   }
 
-  await useLogin(user);
-  await getUserInfos();
+  const loginSuccess = await useLogin(user)
+
+  if (loginSuccess) {
+    router.push('/')
+  }
 }
 </script>
 <style scoped>
