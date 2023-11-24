@@ -9,7 +9,6 @@ const router = express.Router();
 export default function (Message, User, io) {
   // Create a message
   router.post("/", async (req, res) => {
-
     try {
       const { user_uuid, message } = req.body;
 
