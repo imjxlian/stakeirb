@@ -66,7 +66,7 @@ const sendMessage = async () => {
         toast: true,
         position: 'bottom',
         title: 'Oops...',
-        text: error,
+        text: error || "An error occured",
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,

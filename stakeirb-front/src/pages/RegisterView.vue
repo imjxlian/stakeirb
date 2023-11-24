@@ -67,7 +67,7 @@ const registerUser = async () => {
       toast: true,
       position: 'bottom',
       title: 'Oops...',
-      text: e.response.data,
+      text: e.response.data || "An error occured",
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
