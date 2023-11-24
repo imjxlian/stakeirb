@@ -1,25 +1,13 @@
 // controllers/UserController.js
 
 import express from "express";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import 'dotenv/config';
 
 const router = express.Router();
 
 export default function (User) {
-  // Create a user
-  router.post("/register", async (req, res) => {
-    const { username, email, hashedPassword } = req.body;
-    try {
-      const user = await User.create({
-          username,
-          email,
-          password: hashedPassword,
-      });
-      res.status(200).send(user);
-    } catch (error) {
-      console.error("An error occurred:", error);
-      res.status(500).send("User already exists");
-    }
-  });
 
   // Get all users
   router.get("/", async (req, res) => {
@@ -73,16 +61,33 @@ export default function (User) {
     }
   });
 
-  //Log a user
-  router.post('/login', async (req, res) => {
-    const { email, hashedPassword: password } = req.body;
+  router.post("/register", async (req, res) => {
+    const { username, email, hashedPassword } = req.body;
     try {
-      const user = await User.findOne({ where: { email, password } });
-      if (user !== null) {
-        res.status(200).send(user);
-      } else {
-        res.status(403).send('Incorrect email or password');
+      const user = await User.create({
+        username,
+        email,
+        password: hashedPassword,
+      });
+      res.status(200).send(user);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      res.status(500).send("User already exists");
+    }
+  });
+
+  router.post('/login', async (req, res) => {
+    const { email, hashedPassword } = req.body;
+    try {
+      const user = await User.findOne({ where: { email } });
+      if (!user) return res.status(400).json({ message: 'User not found!' });
+
+      if(!(hashedPassword === user.password)){
+        return res.status(400).json({ message: 'Invalid password!' });
       }
+
+      const token = jwt.sign({ uuid_user: user.uuid_user }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+      return res.status(200).json({ accessToken: token });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

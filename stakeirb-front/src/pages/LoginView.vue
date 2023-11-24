@@ -52,19 +52,23 @@ const userLogin = async () => {
   const hashedPassword = sha256(password)
 
   try {
-    // Do a POST request to the server
+    // Faire une requête POST au serveur pour obtenir le jeton JWT
     const response = await axios.post('http://localhost:3000/users/login', { email, hashedPassword });
 
-    // If request is successful, store the user in the store and redirect to home page
-    await store.dispatch('login', response.data);
+    // Stocker le token dans le store et dans les en-têtes de chaque requête Axios ultérieure
+    await store.dispatch('login', response.data.accessToken);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+
+    // Rediriger vers la page d'accueil ou une autre page
     await router.push('/');
   } catch (e) {
+    console.log(e)
       await Swal.fire({
         icon: 'error',
         toast: true,
         position: 'bottom',
         title: 'Oops...',
-        text: e.response.data,
+        text: e.response.data.message || "An error occured",
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,

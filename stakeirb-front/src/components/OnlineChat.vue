@@ -21,10 +21,11 @@ import { computed, ref } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import InputText from './inputs/InputText.vue'
 import MessageBox from './MessageBox.vue'
-import { useSocket } from '../socket'
+import { useSocket } from '@/socket'
 import { useStore } from 'vuex'
 
 import axios from 'axios'
+import Swal from "sweetalert2";
 
 const store = useStore()
 
@@ -53,13 +54,39 @@ const sendMessage = async () => {
     message: currentMessage.value
   }
 
-  try {
-    // Appel à l'API pour envoyer le message
-    await axios.post('http://localhost:3000/messages', message);
-    currentMessage.value = '';
+  if(store.getters.loggedIn === true){
+    try {
+      // Appel à l'API pour envoyer le message
+      await axios.post('http://localhost:3000/messages', message);
+      currentMessage.value = '';
 
-  } catch (error) {
-    console.error('Error sending message:', error);
+    } catch (error) {
+      await Swal.fire({
+        icon: 'error',
+        toast: true,
+        position: 'bottom',
+        title: 'Oops...',
+        text: error,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#203141',
+        color: '#ffffff',
+      });
+    }
+  } else {
+    await Swal.fire({
+      icon: 'error',
+      toast: true,
+      position: 'bottom',
+      title: 'Oops...',
+      text: "You need to be logged in to send a message!",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: '#203141',
+      color: '#ffffff',
+    });
   }
 }
 </script>
