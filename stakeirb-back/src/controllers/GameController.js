@@ -7,7 +7,7 @@ const router = express.Router();
 
 export default function (Game) {
   // Get all games
-  router.get("/", jwtMiddleware, async (req, res) => {
+  router.get("/", async (req, res) => {
     try {
       const games = await Game.findAll();
       res.json(games);
@@ -29,7 +29,7 @@ export default function (Game) {
   });
 
   // Update a game by slug
-  router.put("/:slug", async (req, res) => {
+  router.put("/:slug", jwtMiddleware, async (req, res) => {
     try {
       const game = await Game.findOne({ where: { slug: req.params.slug } });
       game.update(req.body);
@@ -41,7 +41,7 @@ export default function (Game) {
   });
 
   // Delete a game by slug
-  router.delete("/:slug", async (req, res) => {
+  router.delete("/:slug", jwtMiddleware, async (req, res) => {
     try {
       const game = await Game.findOne({ where: { slug: req.params.slug } });
       game.destroy();

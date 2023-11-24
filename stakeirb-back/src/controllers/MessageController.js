@@ -3,12 +3,13 @@
 import express from "express";
 
 import { Server } from "socket.io";
+import {jwtMiddleware} from "../jwt/jwtAuth.js";
 
 const router = express.Router();
 
 export default function (Message, User, io) {
   // Create a message
-  router.post("/", async (req, res) => {
+  router.post("/", jwtMiddleware, async (req, res) => {
     try {
       const { user_uuid, message } = req.body;
 
@@ -80,18 +81,6 @@ export default function (Message, User, io) {
   router.get("/:id", async (req, res) => {
     try {
       const message = await Message.findOne({ where: { id: req.params.id } });
-      res.json(message);
-    } catch (error) {
-      console.error("An error occurred:", error);
-      res.status(500).send("An error occurred");
-    }
-  });
-
-  // Delete a message by ID
-  router.delete("/:id", async (req, res) => {
-    try {
-      const message = await Message.findOne({ where: { id: req.params.id } });
-      message.destroy();
       res.json(message);
     } catch (error) {
       console.error("An error occurred:", error);

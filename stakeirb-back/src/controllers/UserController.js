@@ -3,16 +3,22 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import 'dotenv/config';
+import { jwtMiddleware } from '../jwt/jwtAuth.js';
 
 const router = express.Router();
 
 export default function (User) {
 
   // Get all users
-  router.get("/", async (req, res) => {
+  router.get("/profile", jwtMiddleware, async (req, res) => {
+    // Get user uuid from token
+    const uuid_user = req.uuid_user;
+
     try {
-      const users = await User.findAll();
-      res.json(users);
+      const user = await User.findOne({
+        where: { uuid_user },
+      });
+      res.status(200).json(user);
     } catch (error) {
       console.error("An error occurred:", error);
       res.status(500).send("An error occurred");
@@ -20,7 +26,7 @@ export default function (User) {
   });
 
   // Get a specific user by UUID
-  router.get("/:uuid_user", async (req, res) => {
+  router.get("/:uuid_user", jwtMiddleware, async (req, res) => {
     try {
       const user = await User.findOne({
         where: { uuid_user: req.params.uuid_user },
@@ -33,7 +39,7 @@ export default function (User) {
   });
 
   // Update a user by UUID
-  router.put("/:uuid_user", async (req, res) => {
+  router.put("/:uuid_user", jwtMiddleware, async (req, res) => {
     try {
       const user = await User.findOne({
         where: { uuid_user: req.params.uuid_user },
@@ -47,7 +53,7 @@ export default function (User) {
   });
 
   // Delete a user by UUID
-  router.delete("/:uuid_user", async (req, res) => {
+  router.delete("/:uuid_user", jwtMiddleware, async (req, res) => {
     try {
       const user = await User.findOne({
         where: { uuid_user: req.params.uuid_user },
