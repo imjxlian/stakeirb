@@ -10,7 +10,11 @@
       <MessageBox v-for="message in messages" :key="message.id" :message="message" />
     </div>
     <form class="messages-controls" @submit.prevent="sendMessage">
-      <InputText placeholder="Type your message here..." v-model="currentMessage" class="message-input" />
+      <InputText
+        placeholder="Type your message here..."
+        v-model="currentMessage"
+        class="message-input"
+      />
       <InputButton value="Send" type="success" />
     </form>
   </div>
@@ -25,23 +29,22 @@ import { useSocket } from '@/socket'
 import { useStore } from 'vuex'
 
 import axios from 'axios'
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 
 const store = useStore()
 
-const user_uuid = computed(() => store.getters.uuid_user);
+const user_uuid = computed(() => store.getters.uuid_user)
 
 useSocket().socket.on('usersOnline', (count) => {
-  onlineCount.value = count;
+  onlineCount.value = count
 })
 
 useSocket().socket.on('newMessage', (message) => {
   if (messages.value.length > 100) {
-    messages.value.shift();
+    messages.value.shift()
   }
-  messages.value.push(message);
-
-});
+  messages.value.push(message)
+})
 
 const currentMessage = ref('')
 let onlineCount = ref(0)
@@ -54,12 +57,11 @@ const sendMessage = async () => {
     message: currentMessage.value
   }
 
-  if(store.getters.loggedIn === true){
+  if (store.getters.loggedIn === true) {
     try {
       // Appel à l'API pour envoyer le message
-      await axios.post('http://localhost:3000/messages', message);
-      currentMessage.value = '';
-
+      await axios.post('http://localhost:3000/messages', message)
+      currentMessage.value = ''
     } catch (error) {
       await Swal.fire({
         icon: 'error',
@@ -71,8 +73,8 @@ const sendMessage = async () => {
         timer: 3000,
         timerProgressBar: true,
         background: '#203141',
-        color: '#ffffff',
-      });
+        color: '#ffffff'
+      })
     }
   } else {
     await Swal.fire({
@@ -80,13 +82,13 @@ const sendMessage = async () => {
       toast: true,
       position: 'bottom',
       title: 'Oops...',
-      text: "You need to be logged in to send a message!",
+      text: 'You need to be logged in to send a message!',
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
       background: '#203141',
-      color: '#ffffff',
-    });
+      color: '#ffffff'
+    })
   }
 }
 </script>

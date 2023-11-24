@@ -8,7 +8,6 @@ import { jwtMiddleware } from '../jwt/jwtAuth.js';
 const router = express.Router();
 
 export default function (User) {
-
   // Get all users
   router.get("/profile", jwtMiddleware, async (req, res) => {
     // Get user uuid from token
@@ -82,8 +81,8 @@ export default function (User) {
     }
   });
 
-  router.post('/login', async (req, res) => {
-    const { email, hashedPassword } = req.body;
+  router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
     try {
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(400).json({ message: 'User not found!' });
