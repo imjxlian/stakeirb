@@ -62,7 +62,6 @@ const userLogin = async () => {
     // Rediriger vers la page d'accueil ou une autre page
     await router.push('/');
   } catch (e) {
-    console.log(e)
       await Swal.fire({
         icon: 'error',
         toast: true,

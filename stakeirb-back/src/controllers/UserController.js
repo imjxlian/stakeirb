@@ -2,7 +2,6 @@
 
 import express from "express";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import 'dotenv/config';
 
 const router = express.Router();
@@ -69,7 +68,8 @@ export default function (User) {
         email,
         password: hashedPassword,
       });
-      res.status(200).send(user);
+      const token = jwt.sign({ uuid_user: user.uuid_user }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+      return res.status(200).json({ accessToken: token });
     } catch (error) {
       console.error("An error occurred:", error);
       res.status(500).send("User already exists");
@@ -81,11 +81,9 @@ export default function (User) {
     try {
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(400).json({ message: 'User not found!' });
-
       if(!(hashedPassword === user.password)){
         return res.status(400).json({ message: 'Invalid password!' });
       }
-
       const token = jwt.sign({ uuid_user: user.uuid_user }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
       return res.status(200).json({ accessToken: token });
     } catch (err) {

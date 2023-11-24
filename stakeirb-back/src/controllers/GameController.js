@@ -1,12 +1,13 @@
 // controllers/GameController.js
 
 import express from "express";
+import { jwtMiddleware } from '../jwt/jwtAuth.js';
 
 const router = express.Router();
 
 export default function (Game) {
   // Get all games
-  router.get("/", async (req, res) => {
+  router.get("/", jwtMiddleware, async (req, res) => {
     try {
       const games = await Game.findAll();
       res.json(games);
