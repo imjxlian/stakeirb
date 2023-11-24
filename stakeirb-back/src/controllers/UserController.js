@@ -10,9 +10,9 @@ export default function (User) {
     const { username, email, hashedPassword } = req.body;
     try {
       const user = await User.create({
-          username,
-          email,
-          password: hashedPassword,
+        username,
+        email,
+        password: hashedPassword,
       });
       res.status(200).send(user);
     } catch (error) {
@@ -74,14 +74,14 @@ export default function (User) {
   });
 
   //Log a user
-  router.post('/login', async (req, res) => {
+  router.post("/login", async (req, res) => {
     const { email, hashedPassword: password } = req.body;
     try {
       const user = await User.findOne({ where: { email, password } });
       if (user !== null) {
         res.status(200).send(user);
       } else {
-        res.status(403).send('Incorrect email or password');
+        res.status(403).send("Incorrect email or password");
       }
     } catch (err) {
       return res.status(500).json({ message: err.message });
