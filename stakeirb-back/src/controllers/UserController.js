@@ -90,7 +90,7 @@ export default function (User) {
       if(!(hashedPassword === user.password)){
         return res.status(400).json({ message: 'Invalid password!' });
       }
-      const token = jwt.sign({ uuid_user: user.uuid_user }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ uuid_user: user.uuid_user, username: user.username, email: user.email, balance: user.balance, pfp: user.pfp_url, rank: user.rank_pts }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
       return res.status(200).json({ accessToken: token });
     } catch (err) {
       return res.status(500).json({ message: err.message });
