@@ -46,7 +46,7 @@ import { sha256 } from 'js-sha256'
 import axios from 'axios'
 import router from '@/router'
 import { store } from '@/store'
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 
 const placeholderUsername = 'TheKing123'
 const placeholderEmail = 'email@example.com'
@@ -58,9 +58,13 @@ const registerUser = async () => {
   const hashedPassword = sha256(password)
 
   try {
-    const response = await axios.post('http://localhost:3000/users/register', {username, email, hashedPassword});
-    await store.dispatch('login', response.data);
-    await router.push('/');
+    const response = await axios.post('http://localhost:3000/users/register', {
+      username,
+      email,
+      hashedPassword
+    })
+    await store.dispatch('login', response.data)
+    await router.push('/')
   } catch (e) {
     await Swal.fire({
       icon: 'error',
@@ -72,8 +76,8 @@ const registerUser = async () => {
       timer: 3000,
       timerProgressBar: true,
       background: '#203141',
-      color: '#ffffff',
-    });
+      color: '#ffffff'
+    })
   }
 }
 </script>
