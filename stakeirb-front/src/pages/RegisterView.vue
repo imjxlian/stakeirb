@@ -43,10 +43,11 @@ import InputText from '../components/inputs/InputText.vue'
 
 import { reactive } from 'vue'
 import { sha256 } from 'js-sha256'
-import axios from 'axios'
 import router from '@/router'
-import { store } from '@/store'
-import Swal from "sweetalert2";
+import { useRegister } from '../api/stakeirb-api'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const placeholderUsername = 'TheKing123'
 const placeholderEmail = 'email@example.com'
@@ -57,23 +58,16 @@ const registerUser = async () => {
   const { username, email, password } = form
   const hashedPassword = sha256(password)
 
-  try {
-    const response = await axios.post('http://localhost:3000/users/register', {username, email, hashedPassword});
-    await store.dispatch('login', response.data);
-    await router.push('/');
-  } catch (e) {
-    await Swal.fire({
-      icon: 'error',
-      toast: true,
-      position: 'bottom',
-      title: 'Oops...',
-      text: e.response.data || "An error occured",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      background: '#203141',
-      color: '#ffffff',
-    });
+  const user = {
+    username: username,
+    email: email,
+    hashedPassword: hashedPassword
+  }
+
+  const registerSuccess = await useRegister(user, store)
+
+  if (registerSuccess) {
+    router.push('/')
   }
 }
 </script>

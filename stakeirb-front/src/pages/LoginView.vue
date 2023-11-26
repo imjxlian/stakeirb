@@ -31,19 +31,18 @@
 <script setup>
 import InputButton from '../components/inputs/InputButton.vue'
 import InputText from '../components/inputs/InputText.vue'
+
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLogin } from '../api/stakeirb-api'
+import { sha256 } from 'js-sha256'
 import { useStore } from 'vuex'
-import axios from 'axios'
-
-import { sha256 } from 'js-sha256';
-import Swal from "sweetalert2";
 
 const placeholderEmail = 'email'
 const placeholderPassword = 'password'
 
-const router = useRouter()
 const store = useStore()
+const router = useRouter()
 
 const form = reactive({ email: '', password: '' })
 
@@ -51,31 +50,17 @@ const userLogin = async () => {
   const { email, password } = form
   const hashedPassword = sha256(password)
 
-  try {
-    // Faire une requête POST au serveur pour obtenir le jeton JWT
-    const response = await axios.post('http://localhost:3000/users/login', { email, hashedPassword });
+  const user = {
+    email: email,
+    hashedPassword: hashedPassword
+  }
 
-    // Stocker le token dans le store et dans les en-têtes de chaque requête Axios ultérieure
-    await store.dispatch('login', response.data.accessToken);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+  const loginSuccess = await useLogin(user, store)
 
-    // Rediriger vers la page d'accueil ou une autre page
-    await router.push('/');
-  } catch (e) {
-      await Swal.fire({
-        icon: 'error',
-        toast: true,
-        position: 'bottom',
-        title: 'Oops...',
-        text: e.response.data.message || "An error occured",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        background: '#203141',
-        color: '#ffffff',
-      });
-    }
-};
+  if (loginSuccess) {
+    router.push('/')
+  }
+}
 </script>
 <style scoped>
 .container {

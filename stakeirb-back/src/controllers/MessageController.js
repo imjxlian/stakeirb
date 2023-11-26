@@ -3,7 +3,7 @@
 import express from "express";
 
 import { Server } from "socket.io";
-import {jwtMiddleware} from "../jwt/jwtAuth.js";
+import { jwtMiddleware } from "../jwt/jwtAuth.js";
 
 const router = express.Router();
 

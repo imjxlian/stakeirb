@@ -2,13 +2,12 @@
 
 import express from "express";
 import jwt from "jsonwebtoken";
-import 'dotenv/config';
-import { jwtMiddleware } from '../jwt/jwtAuth.js';
+import "dotenv/config";
+import { jwtMiddleware } from "../jwt/jwtAuth.js";
 
 const router = express.Router();
 
 export default function (User) {
-
   // Get all users
   router.get("/profile", jwtMiddleware, async (req, res) => {
     // Get user uuid from token
@@ -74,7 +73,19 @@ export default function (User) {
         email,
         password: hashedPassword,
       });
-      const token = jwt.sign({ uuid_user: user.uuid_user }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+      const privateUser = {
+        uuid_user: user.uuid_user,
+        username: user.username,
+        email: user.email,
+        balance: user.balance,
+        pfp_url: user.pfp_url,
+        rank_pts: user.rank_pts,
+      };
+      const token = jwt.sign(
+        { user: privateUser },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1h" },
+      );
       return res.status(200).json({ accessToken: token });
     } catch (error) {
       console.error("An error occurred:", error);
@@ -82,13 +93,13 @@ export default function (User) {
     }
   });
 
-  router.post('/login', async (req, res) => {
+  router.post("/login", async (req, res) => {
     const { email, hashedPassword } = req.body;
     try {
       const user = await User.findOne({ where: { email } });
-      if (!user) return res.status(400).json({ message: 'User not found!' });
-      if(!(hashedPassword === user.password)){
-        return res.status(400).json({ message: 'Invalid password!' });
+      if (!user) return res.status(400).json({ message: "User not found!" });
+      if (!(hashedPassword === user.password)) {
+        return res.status(400).json({ message: "Invalid password!" });
       }
       const privateUser = {
         uuid_user: user.uuid_user,
@@ -98,7 +109,11 @@ export default function (User) {
         pfp_url: user.pfp_url,
         rank_pts: user.rank_pts,
       };
-      const token = jwt.sign({ user: privateUser }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign(
+        { user: privateUser },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1h" },
+      );
       return res.status(200).json({ accessToken: token });
     } catch (err) {
       return res.status(500).json({ message: err.message });

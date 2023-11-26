@@ -4,10 +4,10 @@
       <div class="grid">
         <div>
           <h3 v-if="isLoggedIn" class="welcome-msg">
-            Welcome {{ username }}, what are we playing today ?
+            Welcome {{ user.username }}, what are we playing today ?
           </h3>
           <h3 v-else class="welcome-msg">Welcome, please connect yourself in order to play!</h3>
-          <RankBar class="rank-bar" :progress="progress" v-if="isLoggedIn" />
+          <RankBar class="rank-bar" :progress="user.rank_pts" v-if="isLoggedIn" />
           <div class="games">
             <GameCard v-for="game in games" :key="game" :game="game" />
           </div>
@@ -28,8 +28,7 @@ const store = useStore()
 
 const games = ['dice', 'mines', 'plinko', 'roulette']
 const isLoggedIn = computed(() => store.getters.loggedIn)
-const username = computed(() => store.getters.username)
-const progress = computed(() => store.getters.rank_pts)
+const user = computed(() => store.getters.user)
 </script>
 
 <style scoped>

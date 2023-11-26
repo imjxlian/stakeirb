@@ -7,6 +7,7 @@ export default function (sequelize) {
     uuid_user: {
       type: DataTypes.CHAR(36),
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     username: {
       type: DataTypes.STRING(25),
