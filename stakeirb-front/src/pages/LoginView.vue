@@ -34,12 +34,14 @@ import InputText from '../components/inputs/InputText.vue'
 
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useLogin, fetchUserInfos } from '../api/stakeirb-api'
+import { useLogin } from '../api/stakeirb-api'
 import { sha256 } from 'js-sha256'
+import { useStore } from 'vuex'
 
 const placeholderEmail = 'email'
 const placeholderPassword = 'password'
 
+const store = useStore()
 const router = useRouter()
 
 const form = reactive({ email: '', password: '' })
@@ -50,10 +52,10 @@ const userLogin = async () => {
 
   const user = {
     email: email,
-    password: hashedPassword
+    hashedPassword: hashedPassword
   }
 
-  const loginSuccess = await useLogin(user)
+  const loginSuccess = await useLogin(user, store)
 
   if (loginSuccess) {
     router.push('/')

@@ -13,7 +13,7 @@
 
       <div class="balance-container">
         <div class="balance-inner">
-          <span v-if="isLoggedIn" class="balance-amount">{{ balance }}</span>
+          <span v-if="isLoggedIn" class="balance-amount">{{ user.balance }}</span>
           <span v-else class="balance-amount">0</span>
           <CoinIcon />
         </div>
@@ -28,7 +28,7 @@
               alt="User profile picture"
               class="user-img"
             />
-            {{ username }}
+            {{ user.username }}
           </div>
         </router-link>
         <router-link to="/logout">
@@ -55,8 +55,7 @@ import CoinIcon from './CoinIcon.vue'
 import { store } from '@/store'
 
 const isLoggedIn = computed(() => store.getters.loggedIn)
-const username = computed(() => store.getters.username)
-const balance = computed(() => store.getters.balance)
+const user = computed(() => store.getters.user)
 </script>
 
 <style scoped>

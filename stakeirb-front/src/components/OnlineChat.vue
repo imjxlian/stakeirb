@@ -33,7 +33,8 @@ import Swal from 'sweetalert2'
 
 const store = useStore()
 
-const user_uuid = computed(() => store.getters.uuid_user)
+const user_uuid = computed(() => store.getters.user.uuid_user)
+console.log(user_uuid.value)
 
 useSocket().socket.on('usersOnline', (count) => {
   onlineCount.value = count
