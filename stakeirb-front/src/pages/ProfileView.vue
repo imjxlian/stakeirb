@@ -1,109 +1,90 @@
 <template>
   <div class="container">
     <div class="wrapper">
-      <h1>Swarton1</h1>
-      <RankBar class="rank-bar" :progress="progress" />
+      <h1>{{user.username}}</h1>
+      <RankBar class="rank-bar" :progress="user.rank_pts" />
       <div class="stats-container">
         <h2>Statistics</h2>
         <div class="stats-inner">
           <div>
             <h3>Total Bets</h3>
-            <span>4,573</span>
+            <span>{{totalBets}}</span>
           </div>
           <div>
             <h3>Total Wagered</h3>
             <div class="text-icon-flex">
-              <span>409,200</span>
+              <span>{{formattedTotalWagered}}</span>
               <CoinIcon />
             </div>
           </div>
           <div>
             <h3>Total Won</h3>
             <div class="text-icon-flex">
-              <span :class="amountWon >= 0 ? 'color-green' : 'color-red'">{{
-                formattedAmountWon
-              }}</span>
+              <span :class="totalWon >= 0 ? 'color-green' : 'color-red'">{{formattedTotalWon}}</span>
               <CoinIcon />
             </div>
           </div>
         </div>
       </div>
-      <h2>Last bets</h2>
-      <table class="last-bets">
-        <tr>
-          <th>Game</th>
-          <th>Bet Amount</th>
-          <th>Multiplier</th>
-          <th>Date</th>
-        </tr>
-        <tr>
-          <td>Dice</td>
-          <td class="text-icon-flex">
-            <span>100</span>
-            <CoinIcon class="coin-icon" />
-          </td>
-          <td>2.5x</td>
-          <td>10/10/2021 - 23:02</td>
-        </tr>
-        <tr>
-          <td>Dice</td>
-          <td class="text-icon-flex">
-            <span>100</span>
-            <CoinIcon class="coin-icon" />
-          </td>
-          <td>2.5x</td>
-          <td>10/10/2021 - 23:02</td>
-        </tr>
-        <tr>
-          <td>Dice</td>
-          <td class="text-icon-flex">
-            <span>100</span>
-            <CoinIcon class="coin-icon" />
-          </td>
-          <td>2.5x</td>
-          <td>10/10/2021 - 23:02</td>
-        </tr>
-        <tr>
-          <td>Dice</td>
-          <td class="text-icon-flex">
-            <span>100</span>
-            <CoinIcon class="coin-icon" />
-          </td>
-          <td>2.5x</td>
-          <td>10/10/2021 - 23:02</td>
-        </tr>
-      </table>
+        <h2>Last bets</h2>
+        <table class="last-bets">
+          <thead>
+          <tr>
+            <th>Game</th>
+            <th>Bet Amount</th>
+            <th>Multiplier</th>
+            <th>Date</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="bet in userBets" :key="bet.id">
+            <td>{{ bet.Game.name }}</td>
+            <td class="text-icon-flex">
+              <span>{{ bet.bet_amount }}</span>
+              <CoinIcon class="coin-icon" />
+            </td>
+            <td>{{ bet.multiplier }}x</td>
+            <td>{{ formatDate(bet.createdAt) }}</td>
+          </tr>
+          </tbody>
+        </table>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
-import { useRouter } from 'vue-router'
 
 import RankBar from '../components/RankBar.vue'
 import CoinIcon from '../components/CoinIcon.vue'
+import {computed, onMounted, ref} from "vue";
+import {store} from "@/store";
+import axios from "axios";
 
-const progress = 30
-const amountWon = 19340
-const formattedAmountWon = amountWon.toLocaleString('en-US')
+const user = computed(() => store.getters.user)
+const userBets = ref([]); // Utilisation de ref pour suivre les paris reçus
 
-// The url is like /profile/:uuid_user
+// Get all bets from user with a backend call
+onMounted(async () => {
+  const response = await axios.get('http://localhost:3000/bets/user/' + user.value.uuid_user);
+  userBets.value = response.data;
+});
 
-const router = useRouter()
+// Calcul du total des paris
+const totalBets = computed(() => userBets.value.length);
 
-const route = useRoute()
-const user_uuid = route.params.user_uuid
+// Calcul du total misé
+const totalWagered = computed(() => userBets.value.reduce((acc, bet) => acc + bet.bet_amount, 0));
+const formattedTotalWagered = computed(() => totalWagered.value.toLocaleString('en-US'));
 
-const fetchUser = (user_uuid) => {
-  console.log(user_uuid)
-}
+// Calcul du total gagné
+const totalWon = computed(() => userBets.value.reduce((acc, bet) => acc + bet.bet_amount * bet.multiplier, 0) - totalWagered.value);
+const formattedTotalWon = computed(() => totalWon.value.toLocaleString('en-US'));
 
-if (user_uuid) {
-  fetchUser(user_uuid)
-} else {
-  router.push('/')
-}
+// Fonction pour formater la date (vous pouvez ajuster cela en fonction de votre format préféré)
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  return new Date(dateString).toLocaleDateString('fr-FR', options);
+};
 </script>
 
 <style scoped>

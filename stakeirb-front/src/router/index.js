@@ -35,6 +35,16 @@ const router = createRouter({
       component: () => import('../pages/Games/MinesView.vue')
     },
     {
+      path: '/games/roulette',
+      name: 'roulette',
+      component: () => import('../pages/Games/RouletteView.vue')
+    },
+    {
+      path: '/games/plinko',
+      name: 'plinko',
+      component: () => import('../pages/Games/PlinkoView.vue')
+    },
+    {
       path: '/logout',
       name: 'logout',
       beforeEnter: (to, from, next) => {

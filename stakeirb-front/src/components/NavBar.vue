@@ -21,7 +21,7 @@
       </div>
 
       <div v-if="isLoggedIn" class="right-menu">
-        <router-link to="/profile" class="profile-link">
+        <router-link :to="userRoute" class="profile-link">
           <div class="username-container">
             <img
               src="../assets/images/users/default-user-img.svg"
@@ -62,6 +62,7 @@ import { store } from '@/store'
 
 const isLoggedIn = computed(() => store.getters.loggedIn)
 const user = computed(() => store.getters.user)
+const userRoute = computed(() => "/profile/" + store.getters.user.uuid_user)
 
 const emit = defineEmits(['toggleChat'])
 
