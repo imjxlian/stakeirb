@@ -33,7 +33,7 @@ import Swal from 'sweetalert2'
 
 const store = useStore()
 
-const user_uuid = computed(() => store.getters.user.uuid_user)
+const uuid_user = computed(() => store.getters.user.uuid_user)
 
 const onlineCount = ref(0)
 
@@ -68,7 +68,7 @@ socket.on('newMessage', (message) => {
 
 const sendMessage = async () => {
   const message = {
-    uuid_user: user_uuid.value,
+    uuid_user: uuid_user.value,
     message: currentMessage.value
   }
 
@@ -78,6 +78,7 @@ const sendMessage = async () => {
       await axios.post('http://localhost:3000/messages', message)
       currentMessage.value = ''
     } catch (error) {
+      console.log(error)
       await Swal.fire({
         icon: 'error',
         toast: true,

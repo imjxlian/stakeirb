@@ -13,6 +13,9 @@ export const store = createStore({
     logout(state) {
       state.loggedIn = false
       state.user = {}
+    },
+    updateBalance(state, balance) {
+      state.user.balance = balance
     }
   },
   actions: {
@@ -23,6 +26,12 @@ export const store = createStore({
     logout: ({ commit }) => {
       localStorage.removeItem('user')
       commit('logout')
+    },
+    updateBalance: ({ commit }, balance) => {
+      const user = JSON.parse(localStorage.getItem('user'))
+      const newUser = { ...user, balance: balance }
+      localStorage.setItem('user', JSON.stringify(newUser))
+      commit('updateBalance', balance)
     }
   },
   getters: {

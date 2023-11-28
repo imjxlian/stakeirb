@@ -49,6 +49,10 @@ import InputNumber from '../../components/inputs/InputNumber.vue'
 import InputButton from '../../components/inputs/InputButton.vue'
 import { computed, ref } from 'vue'
 import axios from 'axios'
+import { useStore } from 'vuex'
+import Swal from 'sweetalert2'
+
+const store = useStore()
 
 const MAX_BET_AMOUNT = 1000000
 const MAX_BETS_HISTORY = 5
@@ -88,6 +92,11 @@ function multiplyBy2() {
 }
 
 function maxBet() {
+  const userBalance = store.state.user.balance
+  if (userBalance < MAX_BET_AMOUNT) {
+    betAmount.value = userBalance
+    return
+  }
   betAmount.value = MAX_BET_AMOUNT
 }
 
@@ -104,6 +113,22 @@ function updateRange(newVal) {
 let hideTimer = null
 
 async function bet() {
+  if (betAmount.value > store.state.user.balance) {
+    await Swal.fire({
+      icon: 'error',
+      toast: true,
+      position: 'bottom',
+      title: 'Oops...',
+      text: 'You don\'t have enough money to bet',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: '#203141',
+      color: '#ffffff'
+    })
+    return
+  }
+
   playSound('../src/assets/sounds/bet.mp3')
   await sleep(200)
 
@@ -112,8 +137,8 @@ async function bet() {
     is_under: isUnder.value,
     target: range.value,
     bet_amount: betAmount.value,
-    uuid_user: 'f7e727c6-257d-4f40-8017-52c31f1f82ca' // TODO: Replace by the user id
-  })
+    uuid_user: store.state.user.uuid_user
+  });
 
   // TODO: Handle errors
   if (res.data.error) {
@@ -124,6 +149,12 @@ async function bet() {
   try {
     result.value = res.data.data.result
     result.value = parseFloat(result.value).toFixed(2)
+
+    // Update user balance
+    const multiplier = parseFloat(res.data.multiplier)
+    const newBalance = store.state.user.balance - betAmount.value + res.data.bet_amount * multiplier
+
+    store.dispatch('updateBalance', newBalance)
   } catch (e) {
     console.log(e)
     return

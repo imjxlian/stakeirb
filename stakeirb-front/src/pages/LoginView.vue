@@ -38,8 +38,8 @@ import { useLogin } from '../api/stakeirb-api'
 import { sha256 } from 'js-sha256'
 import { useStore } from 'vuex'
 
-const placeholderEmail = 'email'
-const placeholderPassword = 'password'
+const placeholderEmail = 'E-mail'
+const placeholderPassword = 'Password'
 
 const store = useStore()
 const router = useRouter()
