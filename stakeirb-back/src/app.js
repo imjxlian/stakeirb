@@ -59,7 +59,7 @@ const hydrateDatabase = async () => {
       email: "bob@example.com",
       password:
         "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-      uuid_user: uuidv4(),
+      uuid_user: "f7e727c6-257d-4f40-8017-52c31f1f82cb",
       balance: 2000,
       pfp_url: "https://i.imgur.com/0y8Ftya.png",
       rank_pts: 40,
@@ -75,22 +75,22 @@ const hydrateDatabase = async () => {
       name: "Mines",
     });
 
-    // Créez des paris associés aux utilisateurs et aux jeux
-    await Bets.create({
-      uuid_user: user1.uuid_user,
-      game_id: game1.id,
-      bet_amount: 100.0,
-      multiplier: 2.0,
-      win: false,
-    });
+    // // Créez des paris associés aux utilisateurs et aux jeux
+    // await Bets.create({
+    //   uuid_user: user1.uuid_user,
+    //   game_id: game1.id,
+    //   bet_amount: 100.0,
+    //   multiplier: 2.0,
+    //   win: false,
+    // });
 
-    await Bets.create({
-      uuid_user: user2.uuid_user,
-      game_id: game2.id,
-      bet_amount: 50.0,
-      multiplier: 3.0,
-      win: true,
-    });
+    // await Bets.create({
+    //   uuid_user: user2.uuid_user,
+    //   game_id: game2.id,
+    //   bet_amount: 50.0,
+    //   multiplier: 3.0,
+    //   win: true,
+    // });
 
     // Créez des messages associés aux utilisateurs
     await Messages.create({
@@ -132,7 +132,7 @@ app.use("/users", userController(User));
 app.use("/games", gameController(Game));
 app.use("/bets", betsController(Bets));
 app.use("/messages", messagesController(Messages, User, io));
-app.use("/games/dice", DiceController(Bets));
+app.use("/games/dice", DiceController(Bets, User));
 
 io.on("connection", (socket) => {
   if (!usersOnline.includes(socket.id)) {
