@@ -30,7 +30,10 @@ export default function (Bet) {
   // Get a specific bet by ID
   router.get("/:id", async (req, res) => {
     try {
-      const bet = await Bet.findOne({ where: { id: req.params.id } });
+      const bet = await Bet.findOne({
+        where: { id: req.params.id },
+        include: ["User", "Game"]
+      });
       res.json(bet);
     } catch (error) {
       console.error("An error occurred:", error);

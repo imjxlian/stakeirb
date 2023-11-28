@@ -66,7 +66,6 @@ const user = computed(() => store.getters.user)
 const emit = defineEmits(['toggleChat'])
 
 const toggleChat = () => {
-  console.log('toggleChat')
   emit('toggleChat')
 }
 </script>

@@ -8,7 +8,7 @@ export default function (Bet) {
   // Place a dice bet
   router.post("/", async (req, res) => {
     try {
-      let { target, is_under, bet_amount, user_uuid } = req.body;
+      let { target, is_under, bet_amount, uuid_user } = req.body;
 
       target = parseFloat(target);
 
@@ -37,7 +37,7 @@ export default function (Bet) {
         : (100 / (100 - target)).toFixed(2);
 
       const betData = {
-        user_uuid: user_uuid,
+        uuid_user: uuid_user,
         game_id: game_id,
         bet_amount: bet_amount,
         multiplier:
@@ -54,30 +54,6 @@ export default function (Bet) {
 
       const bet = await Bet.create(betData);
 
-      res.json(bet);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  // Get all bets
-  router.get("/bets", async (req, res) => {
-    try {
-      const bets = await Bet.findAll();
-      res.json(bets);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  // Get a bet by its id
-  router.get("/:id", async (req, res) => {
-    try {
-      const bet = await Bet.findOne({ where: { id: req.params.id } });
-      if (!bet) {
-        res.status(404).json({ error: "Bet not found" });
-        return;
-      }
       res.json(bet);
     } catch (error) {
       res.status(500).json({ error: error.message });

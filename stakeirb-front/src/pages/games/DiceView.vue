@@ -112,7 +112,7 @@ async function bet() {
     is_under: isUnder.value,
     target: range.value,
     bet_amount: betAmount.value,
-    user_uuid: 'f7e727c6-257d-4f40-8017-52c31f1f82ca' // TODO: Replace by the user id
+    uuid_user: 'f7e727c6-257d-4f40-8017-52c31f1f82ca' // TODO: Replace by the user id
   })
 
   // TODO: Handle errors

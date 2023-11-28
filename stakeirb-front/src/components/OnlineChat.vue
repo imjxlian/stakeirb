@@ -52,6 +52,7 @@ onMounted(() => {
 })
 
 socket.on('messages', (messagesArray) => {
+  console.log("messagesArray", messagesArray)
   messages.value = messagesArray
 })
 
@@ -64,7 +65,7 @@ socket.on('newMessage', (message) => {
 
 const sendMessage = async () => {
   const message = {
-    user_uuid: user_uuid.value,
+    uuid_user: user_uuid.value,
     message: currentMessage.value
   }
 
