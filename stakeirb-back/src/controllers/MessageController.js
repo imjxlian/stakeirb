@@ -13,9 +13,7 @@ export default function (Message, User, io) {
       const { uuid_user, message } = req.body;
 
       if (!uuid_user || !message) {
-        return res
-          .status(400)
-          .send("Missing fields");
+        return res.status(400).send("Missing fields");
       }
 
       if (message.length > 140) {
