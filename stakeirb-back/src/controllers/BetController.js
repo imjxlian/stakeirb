@@ -32,7 +32,7 @@ export default function (Bet) {
     try {
       const bet = await Bet.findOne({
         where: { id: req.params.id },
-        include: ["User", "Game"]
+        include: ["User", "Game"],
       });
       res.json(bet);
     } catch (error) {

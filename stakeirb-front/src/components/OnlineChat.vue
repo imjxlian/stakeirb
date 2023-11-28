@@ -52,13 +52,16 @@ onMounted(() => {
 })
 
 socket.on('messages', (messagesArray) => {
-  console.log("messagesArray", messagesArray)
   messages.value = messagesArray
 })
 
 socket.on('newMessage', (message) => {
   if (messages.value.length > 100) {
     messages.value.shift()
+  }
+
+  if (messages.value.includes(message)) {
+    return
   }
   messages.value.push(message)
 })
