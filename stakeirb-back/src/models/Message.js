@@ -9,7 +9,7 @@ export default function (sequelize) {
       primaryKey: true,
       autoIncrement: true,
     },
-    user_uuid: {
+    uuid_user: {
       type: DataTypes.CHAR(36),
     },
     message: {
@@ -19,7 +19,7 @@ export default function (sequelize) {
   });
 
   Message.associate = (models) => {
-    Message.belongsTo(models.User, { foreignKey: "user_uuid" });
+    Message.belongsTo(models.User, { foreignKey: "uuid_user" });
   };
 
   return Message;

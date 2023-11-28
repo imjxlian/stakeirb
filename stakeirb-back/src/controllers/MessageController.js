@@ -2,7 +2,6 @@
 
 import express from "express";
 
-import { Server } from "socket.io";
 import { jwtMiddleware } from "../jwt/jwtAuth.js";
 
 const router = express.Router();
@@ -86,6 +85,25 @@ export default function (Message, User, io) {
       console.error("An error occurred:", error);
       res.status(500).send("An error occurred");
     }
+  });
+
+  io.on("connection", (socket) => {
+    socket.on("getMessages", async () => {
+      try {
+        const messages = await Message.findAll({
+          order: [["createdAt", "DESC"]],
+          limit: 100,
+          include: {
+            model: User,
+            attributes: ["uuid_user", "username", "pfp_url"],
+          },
+        });
+
+        socket.emit("messages", messages);
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    });
   });
 
   return router;

@@ -140,4 +140,8 @@ io.on("connection", (socket) => {
     usersOnline = usersOnline.filter((user) => user !== socket.id);
     io.emit("usersOnline", usersOnline.length);
   });
+
+  socket.on("getOnlineUsers", () => {
+    io.emit("usersOnline", usersOnline.length);
+  });
 });

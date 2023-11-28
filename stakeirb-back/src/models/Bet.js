@@ -9,7 +9,7 @@ export default function (sequelize) {
       primaryKey: true,
       autoIncrement: true,
     },
-    user_uuid: {
+    uuid_user: {
       type: DataTypes.CHAR(36),
     },
     game_id: {
@@ -33,7 +33,7 @@ export default function (sequelize) {
   });
 
   Bet.associate = (models) => {
-    Bet.belongsTo(models.User, { foreignKey: "user_uuid" });
+    Bet.belongsTo(models.User, { foreignKey: "uuid_user" });
     Bet.belongsTo(models.Game, { foreignKey: "game_id" });
   };
 
