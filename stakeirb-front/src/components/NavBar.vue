@@ -34,6 +34,9 @@
         <router-link to="/logout">
           <InputButton :value="'Logout'" :type="'danger'" :disabled="false" />
         </router-link>
+        <div @click="toggleChat">
+          <img src="../assets/images/icons/message.svg" alt="Message" class="msg-icon" />
+        </div>
       </div>
 
       <div v-else class="right-menu">
@@ -43,6 +46,9 @@
         <router-link to="/register">
           <InputButton :value="'Register'" :type="'success'" :disabled="false" />
         </router-link>
+        <div @click="toggleChat">
+          <img src="../assets/images/icons/message.svg" alt="Message" class="msg-icon" />
+        </div>
       </div>
     </div>
   </header>
@@ -56,6 +62,13 @@ import { store } from '@/store'
 
 const isLoggedIn = computed(() => store.getters.loggedIn)
 const user = computed(() => store.getters.user)
+
+const emit = defineEmits(['toggleChat'])
+
+const toggleChat = () => {
+  console.log('toggleChat')
+  emit('toggleChat')
+}
 </script>
 
 <style scoped>
@@ -173,5 +186,11 @@ const user = computed(() => store.getters.user)
 .profile-link {
   text-decoration: none;
   color: var(--color-text-light);
+}
+
+.msg-icon {
+  height: 1.2rem;
+  aspect-ratio: 1/1;
+  cursor: pointer;
 }
 </style>

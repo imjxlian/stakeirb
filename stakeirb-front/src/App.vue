@@ -1,13 +1,13 @@
 <template>
   <div class="container" v-if="isChatVisible">
-    <div class="main-container">
-      <NavBar />
+    <div class="inner">
+      <NavBar @toggleChat="toggleChat" />
       <RouterView />
     </div>
-    <OnlineChat class="online-chat" />
+    <OnlineChat />
   </div>
-  <div class="main-container" v-else>
-    <NavBar />
+  <div v-else>
+    <NavBar @toggleChat="toggleChat" />
     <RouterView class="router" />
   </div>
 </template>
@@ -18,19 +18,20 @@ import OnlineChat from './components/OnlineChat.vue'
 import { ref } from 'vue'
 
 let isChatVisible = ref(true)
+
+const toggleChat = () => {
+  isChatVisible.value = !isChatVisible.value
+}
 </script>
 
 <style scoped>
 .container {
   display: flex;
   flex: row;
-  justify-content: space-between;
-  align-items: stretch;
+  justify-content: flex-start;
 }
 
-.main-container {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  width: 100%;
+.inner {
+  flex-grow: 1;
 }
 </style>

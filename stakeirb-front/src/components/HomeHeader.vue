@@ -1,18 +1,15 @@
 <template>
   <div class="container">
     <div class="wrapper">
-      <div class="grid">
-        <div>
-          <h3 v-if="isLoggedIn" class="welcome-msg">
-            Welcome {{ user.username }}, what are we playing today ?
-          </h3>
-          <h3 v-else class="welcome-msg">Welcome, please connect yourself in order to play!</h3>
-          <RankBar class="rank-bar" :progress="user.rank_pts" v-if="isLoggedIn" />
-          <div class="games">
-            <GameCard v-for="game in games" :key="game" :game="game" />
-          </div>
+      <div>
+        <h3 v-if="isLoggedIn" class="welcome-msg">
+          Welcome {{ user.username }}, what are we playing today ?
+        </h3>
+        <h3 v-else class="welcome-msg">Welcome, please connect yourself in order to play!</h3>
+        <RankBar class="rank-bar" :progress="user.rank_pts" v-if="isLoggedIn" />
+        <div class="games">
+          <GameCard v-for="game in games" :key="game" :game="game" />
         </div>
-        <img src="../assets/images/elon-musk-image.png" alt="Elon Musk" class="home-image" />
       </div>
     </div>
   </div>
@@ -33,9 +30,7 @@ const user = computed(() => store.getters.user)
 
 <style scoped>
 .container {
-  background-color: var(--color-background-dark);
   padding: var(--padding-container);
-  height: 10000px; /* Temporary */
 }
 
 .wrapper {
@@ -52,6 +47,8 @@ const user = computed(() => store.getters.user)
 
 .welcome-msg {
   margin-top: 0;
+  text-align: center;
+  font-weight: 600;
 }
 
 .home-image {
@@ -73,5 +70,6 @@ const user = computed(() => store.getters.user)
 
 .rank-bar {
   width: 75%;
+  margin: auto;
 }
 </style>

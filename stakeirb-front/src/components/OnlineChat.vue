@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import InputText from './inputs/InputText.vue'
 import MessageBox from './MessageBox.vue'
@@ -34,23 +34,33 @@ import Swal from 'sweetalert2'
 const store = useStore()
 
 const user_uuid = computed(() => store.getters.user.uuid_user)
-console.log(user_uuid.value)
 
-useSocket().socket.on('usersOnline', (count) => {
+const onlineCount = ref(0)
+
+const currentMessage = ref('')
+const messages = ref([])
+
+const socket = useSocket().socket
+
+socket.on('usersOnline', (count) => {
   onlineCount.value = count
 })
 
-useSocket().socket.on('newMessage', (message) => {
+onMounted(() => {
+  socket.emit('getOnlineUsers')
+  socket.emit('getMessages')
+})
+
+socket.on('messages', (messagesArray) => {
+  messages.value = messagesArray
+})
+
+socket.on('newMessage', (message) => {
   if (messages.value.length > 100) {
     messages.value.shift()
   }
   messages.value.push(message)
 })
-
-const currentMessage = ref('')
-let onlineCount = ref(0)
-
-const messages = ref([])
 
 const sendMessage = async () => {
   const message = {
@@ -103,8 +113,17 @@ const sendMessage = async () => {
   height: 100vh;
   position: sticky;
   top: 0;
+  bottom: 0;
   right: 0;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  min-width: 300px;
+  max-width: 350px;
+}
+
+@media screen and (max-width: 1160px) {
+  .container {
+    display: none !important;
+  }
 }
 
 .header {
