@@ -18,9 +18,5 @@ export default function (sequelize) {
     },
   });
 
-  Message.associate = (models) => {
-    Message.belongsTo(models.User, { foreignKey: "uuid_user" });
-  };
-
   return Message;
 }

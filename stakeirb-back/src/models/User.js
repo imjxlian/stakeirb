@@ -28,17 +28,13 @@ export default function (sequelize) {
     },
     pfp_url: {
       type: DataTypes.STRING(255),
+      defaultValue: "https://i.imgur.com/0y8Ftya.png",
     },
     rank_pts: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
   });
-
-  User.associate = (models) => {
-    User.hasMany(models.Bets, { foreignKey: "uuid_user" });
-    User.hasMany(models.Message, { foreignKey: "uuid_user" });
-  };
 
   return User;
 }

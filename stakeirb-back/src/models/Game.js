@@ -24,9 +24,5 @@ export default function (sequelize) {
     },
   });
 
-  Game.associate = (models) => {
-    Game.hasMany(models.Bets, { foreignKey: "game_id" });
-  };
-
   return Game;
 }

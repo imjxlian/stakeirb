@@ -32,10 +32,5 @@ export default function (sequelize) {
     },
   });
 
-  Bet.associate = (models) => {
-    Bet.belongsTo(models.User, { foreignKey: "uuid_user" });
-    Bet.belongsTo(models.Game, { foreignKey: "game_id" });
-  };
-
   return Bet;
 }

@@ -30,6 +30,12 @@ const Game = createGameModel(sequelize);
 const Bets = createBetsModel(sequelize);
 const Messages = createMessagesModel(sequelize);
 
+User.hasMany(Bets, { foreignKey: "uuid_user" });
+User.hasMany(Messages, { foreignKey: "uuid_user" });
+Bets.belongsTo(User, { foreignKey: "uuid_user" });
+Bets.belongsTo(Game, { foreignKey: "game_id" });
+Messages.belongsTo(User, { foreignKey: "uuid_user" });
+
 // Hydratez la base de données avec des données réalistes
 const hydrateDatabase = async () => {
   try {
@@ -71,7 +77,7 @@ const hydrateDatabase = async () => {
 
     // Créez des paris associés aux utilisateurs et aux jeux
     await Bets.create({
-      user_uuid: user1.uuid_user,
+      uuid_user: user1.uuid_user,
       game_id: game1.id,
       bet_amount: 100.0,
       multiplier: 2.0,
@@ -79,7 +85,7 @@ const hydrateDatabase = async () => {
     });
 
     await Bets.create({
-      user_uuid: user2.uuid_user,
+      uuid_user: user2.uuid_user,
       game_id: game2.id,
       bet_amount: 50.0,
       multiplier: 3.0,
@@ -88,12 +94,12 @@ const hydrateDatabase = async () => {
 
     // Créez des messages associés aux utilisateurs
     await Messages.create({
-      user_uuid: user1.uuid_user,
+      uuid_user: user1.uuid_user,
       message: "Hello from Alice",
     });
 
     await Messages.create({
-      user_uuid: user2.uuid_user,
+      uuid_user: user2.uuid_user,
       message: "Greetings from Bob",
     });
 

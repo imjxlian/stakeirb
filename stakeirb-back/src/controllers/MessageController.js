@@ -10,10 +10,12 @@ export default function (Message, User, io) {
   // Create a message
   router.post("/", jwtMiddleware, async (req, res) => {
     try {
-      const { user_uuid, message } = req.body;
+      const { uuid_user, message } = req.body;
 
-      if (!user_uuid || !message) {
-        return res.status(400).send("Missing fields");
+      if (!uuid_user || !message) {
+        return res
+          .status(400)
+          .send("Missing fields");
       }
 
       if (message.length > 140) {
@@ -23,7 +25,7 @@ export default function (Message, User, io) {
       }
 
       const newMessage = {
-        user_uuid,
+        uuid_user,
         message,
       };
 
@@ -33,13 +35,13 @@ export default function (Message, User, io) {
         return res.status(500).send("An error occurred");
       }
 
-      const user = await User.findOne({ where: { uuid_user: user_uuid } });
+      const user = await User.findOne({ where: { uuid_user: uuid_user } });
 
       if (!user) {
-        return res.status(404).send("User not found");
+        return res.status(500).send("User not found");
       }
 
-      newMessage.user = user;
+      newMessage.User = user;
 
       io.emit("newMessage", newMessage);
 
@@ -91,11 +93,10 @@ export default function (Message, User, io) {
     socket.on("getMessages", async () => {
       try {
         const messages = await Message.findAll({
-          order: [["createdAt", "DESC"]],
+          order: [["createdAt", "ASC"]],
           limit: 100,
           include: {
             model: User,
-            attributes: ["uuid_user", "username", "pfp_url"],
           },
         });
 

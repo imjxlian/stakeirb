@@ -1,8 +1,8 @@
 <template>
   <div class="message-box">
     <div class="user">
-      <img class="user-img" :src="message.user.pfp_url" alt="" />
-      <span class="user-name">{{ message.user.username }}</span>
+      <img class="user-img" :src="message.User.pfp_url" alt="" v-if="message.User.pfp_url" />
+      <span class="user-name">{{ message.User.username }}</span>
     </div>
     <span class="message">{{ message.message }}</span>
   </div>
