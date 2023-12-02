@@ -17,7 +17,7 @@
           <span v-else class="balance-amount">0</span>
           <CoinIcon />
         </div>
-        <button class="button success deposit-btn">+</button>
+        <button class="button success deposit-btn" @click="updateMoneyAmount(user)">+</button>
       </div>
 
       <div v-if="isLoggedIn" class="right-menu">
@@ -59,6 +59,7 @@ import { computed } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import CoinIcon from './CoinIcon.vue'
 import { store } from '@/store'
+import {updateMoneyAmount} from "@/api/stakeirb-api";
 
 const isLoggedIn = computed(() => store.getters.loggedIn)
 const user = computed(() => store.getters.user)
