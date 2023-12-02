@@ -1,4 +1,5 @@
 import express from "express";
+import axios from "axios";
 import { jwtMiddleware } from "../../jwt/jwtAuth.js";
 
 const router = express.Router();
@@ -39,8 +40,19 @@ export default function (Bet, User) {
 
       const game_id = 1;
 
-      // TODO: Replace this line by a call to the random.org API
-      const result = parseFloat((Math.random() * 100).toFixed(2));
+      // Get a random number between 0 and 100 from random.org
+      const getRandomNumberFromApi = async () => {
+        try {
+          let res = await axios.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new')
+          return res.data
+        } catch (e) {
+          console.log(e)
+        }
+      }
+
+      const randomInteger = await getRandomNumberFromApi()
+
+      const result = parseFloat(randomInteger);
 
       const multiplier = is_under
         ? (100 / target).toFixed(2)

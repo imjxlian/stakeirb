@@ -115,3 +115,12 @@ export const placeDiceBet = async (bet) => {
     displayErrorModal('Impossible to place bet')
   }
 }
+
+export const getRandomNumberFromApi = async () => {
+    try {
+        let res = await axios.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new')
+        return res.data
+    } catch (e) {
+        displayErrorModal('Impossible to get random number')
+    }
+}
