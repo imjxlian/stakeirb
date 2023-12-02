@@ -91,3 +91,28 @@ export const useRegister = async (user, store) => {
     return false
   }
 }
+
+export const placeDiceBet = async (bet) => {
+  try {
+    let res = await axios.post('http://localhost:3000/games/dice', {
+      is_under: bet.is_under,
+      target: bet.target,
+      bet_amount: bet.bet_amount
+    })
+
+    return res.data
+  } catch (e) {
+    Swal.fire({
+      icon: 'error',
+      toast: true,
+      position: 'bottom',
+      title: 'Oops...',
+      text: 'An error occurred',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: '#203141',
+      color: '#ffffff'
+    })
+  }
+}

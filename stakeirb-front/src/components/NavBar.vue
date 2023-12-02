@@ -13,7 +13,7 @@
 
       <div class="balance-container">
         <div class="balance-inner">
-          <span v-if="isLoggedIn" class="balance-amount">{{ user.balance }}</span>
+          <span v-if="isLoggedIn" class="balance-amount">{{ formattedUserBalance }}</span>
           <span v-else class="balance-amount">0</span>
           <CoinIcon />
         </div>
@@ -24,7 +24,7 @@
         <router-link :to="userRoute" class="profile-link">
           <div class="username-container">
             <img
-              src="../assets/images/users/default-user-img.svg"
+              :src="user.pfp_url ? user.pfp_url : '../assets/images/users/default-user-img.svg'"
               alt="User profile picture"
               class="user-img"
             />
@@ -62,13 +62,23 @@ import { store } from '@/store'
 
 const isLoggedIn = computed(() => store.getters.loggedIn)
 const user = computed(() => store.getters.user)
-const userRoute = computed(() => "/profile/" + store.getters.user.uuid_user)
+const userRoute = computed(() => '/profile/' + store.getters.user.uuid_user)
 
 const emit = defineEmits(['toggleChat'])
 
 const toggleChat = () => {
   emit('toggleChat')
 }
+
+const formattedUserBalance = computed(() => {
+  if (isLoggedIn.value) {
+    // Assuming user.balance is the property holding the balance value
+    const balance = parseInt(user.value.balance);
+    return balance.toLocaleString("en-US"); // Use the appropriate property
+  } else {
+    return '0';
+  }
+});
 </script>
 
 <style scoped>

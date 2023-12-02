@@ -24,7 +24,7 @@ export const jwtMiddleware = (req, res, next) => {
     }
 
     // Ajouter les données du token à la requête pour une utilisation ultérieure
-    req.uuid_user = decoded.uuid_user;
+    req.user = decoded.user;
     next();
   });
 };

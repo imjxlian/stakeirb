@@ -11,6 +11,7 @@ export default function (sequelize) {
     },
     username: {
       type: DataTypes.STRING(25),
+      unique: true,
       allowNull: false,
     },
     email: {

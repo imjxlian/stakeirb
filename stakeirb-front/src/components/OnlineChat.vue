@@ -78,7 +78,6 @@ const sendMessage = async () => {
       await axios.post('http://localhost:3000/messages', message)
       currentMessage.value = ''
     } catch (error) {
-      console.log(error)
       await Swal.fire({
         icon: 'error',
         toast: true,

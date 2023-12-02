@@ -1,11 +1,17 @@
 <template>
   <div class="bar-container">
-    <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+    <div class="progress-bar" :style="{ width: formattedProgress + '%' }"></div>
   </div>
 </template>
 
 <script setup>
-defineProps(['progress'])
+import { computed } from 'vue';
+
+const props = defineProps(['progress'])
+
+const formattedProgress = computed(() => {
+  return props.progress / 100
+})
 </script>
 
 <style scoped>

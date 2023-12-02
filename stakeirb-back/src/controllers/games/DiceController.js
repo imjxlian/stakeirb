@@ -1,4 +1,5 @@
 import express from "express";
+import { jwtMiddleware } from "../../jwt/jwtAuth.js";
 
 const router = express.Router();
 const MIN_BET_AMOUNT = 0;
@@ -6,9 +7,10 @@ const MAX_BET_AMOUNT = 1000000;
 
 export default function (Bet, User) {
   // Place a dice bet
-  router.post("/", async (req, res) => {
+  router.post("/", jwtMiddleware, async (req, res) => {
     try {
-      let { target, is_under, bet_amount, uuid_user } = req.body;
+      let { target, is_under, bet_amount } = req.body;
+      let uuid_user = req.user.uuid_user;
 
       target = parseFloat(target);
 
@@ -65,10 +67,25 @@ export default function (Bet, User) {
       if (bet) {
         user.balance -= bet.bet_amount;
         user.balance += bet.win ? bet.bet_amount * bet.multiplier : 0;
+
+        user.rank_pts += parseInt(bet.bet_amount);
         await user.save();
       }
 
-      res.json(bet);
+      // Create a newBet that includes rank_pts and balance
+      const newBet = {
+        uuid_bet: bet.uuid_bet,
+        uuid_user: bet.uuid_user,
+        game_id: bet.game_id,
+        bet_amount: bet.bet_amount,
+        multiplier: bet.multiplier,
+        win: bet.win,
+        data: bet.data,
+        rank_pts: user.rank_pts,
+        balance: user.balance,
+      };
+
+      res.json(newBet);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

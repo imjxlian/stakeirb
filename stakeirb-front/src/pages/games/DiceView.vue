@@ -7,7 +7,7 @@
             class="bet-amount-input"
             :step="1"
             :min="1"
-            :value="betAmount.toFixed(0)"
+            :value="Number(betAmount) !== 0 ? Number(betAmount).toFixed(0) : 0"
             label="Bet Amount"
             imageSrc="../src/assets/images/icons/coineirb.png"
             :disabled="false"
@@ -48,9 +48,9 @@ import DiceBar from '../../components/DiceBar.vue'
 import InputNumber from '../../components/inputs/InputNumber.vue'
 import InputButton from '../../components/inputs/InputButton.vue'
 import { computed, ref } from 'vue'
-import axios from 'axios'
 import { useStore } from 'vuex'
 import Swal from 'sweetalert2'
+import { placeDiceBet } from '../../api/stakeirb-api'
 
 const store = useStore()
 
@@ -113,13 +113,30 @@ function updateRange(newVal) {
 let hideTimer = null
 
 async function bet() {
+
+  if (store.getters.loggedIn === false) {
+    await Swal.fire({
+      icon: 'error',
+      toast: true,
+      position: 'bottom',
+      title: 'Oops...',
+      text: 'You need to be logged in to bet',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: '#203141',
+      color: '#ffffff'
+    })
+    return
+  }
+
   if (betAmount.value > store.state.user.balance) {
     await Swal.fire({
       icon: 'error',
       toast: true,
       position: 'bottom',
       title: 'Oops...',
-      text: 'You don\'t have enough money to bet',
+      text: "You don't have enough money to bet",
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
@@ -132,36 +149,26 @@ async function bet() {
   playSound('../src/assets/sounds/bet.mp3')
   await sleep(200)
 
-  // Make a call with axios
-  let res = await axios.post('http://localhost:3000/games/dice', {
+  const bet = {
     is_under: isUnder.value,
     target: range.value,
     bet_amount: betAmount.value,
     uuid_user: store.state.user.uuid_user
-  });
-
-  // TODO: Handle errors
-  if (res.data.error) {
-    console.log(res.data.error)
-    return
   }
 
+  const res = await placeDiceBet(bet);
+
   try {
-    result.value = res.data.data.result
-    result.value = parseFloat(result.value).toFixed(2)
-
-    // Update user balance
-    const multiplier = parseFloat(res.data.multiplier)
-    const newBalance = store.state.user.balance - betAmount.value + res.data.bet_amount * multiplier
-
-    store.dispatch('updateBalance', newBalance)
+    result.value = parseFloat(res.data.result).toFixed(2)
+    console.log(res.rank_pts)
+    store.dispatch('updateBalance', { balance: res.balance, rank_pts: res.rank_pts })
   } catch (e) {
     console.log(e)
     return
   }
 
-  const won = checkWin()
-  const newBet = { id: Date.now(), win: won, result: parseFloat(result.value) }
+  const won = res.win;
+  const newBet = { id: Date.now(), win: res.win, result: parseFloat(result.value) }
   betsHistory.value.push(newBet)
 
   if (betsHistory.value.length > MAX_BETS_HISTORY) {
@@ -182,13 +189,6 @@ function sleep(ms) {
 function playSound(src) {
   const audio = new Audio(src)
   audio.play()
-}
-
-function checkWin() {
-  return (
-    (isUnder.value && parseFloat(result.value) <= parseFloat(range.value)) ||
-    (!isUnder.value && parseFloat(result.value) > parseFloat(range.value))
-  )
 }
 
 function animateDiceRoll() {
