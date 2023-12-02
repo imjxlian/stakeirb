@@ -51,6 +51,7 @@ import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import Swal from 'sweetalert2'
 import { placeDiceBet } from '../../api/stakeirb-api'
+import {displayErrorModal} from "@/components/modals/modalsManager";
 
 const store = useStore()
 
@@ -114,34 +115,12 @@ let hideTimer = null
 
 async function bet() {
   if (store.getters.loggedIn === false) {
-    await Swal.fire({
-      icon: 'error',
-      toast: true,
-      position: 'bottom',
-      title: 'Oops...',
-      text: 'You need to be logged in to bet',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      background: '#203141',
-      color: '#ffffff'
-    })
+    displayErrorModal('You need to be logged in to bet')
     return
   }
 
   if (betAmount.value > store.state.user.balance) {
-    await Swal.fire({
-      icon: 'error',
-      toast: true,
-      position: 'bottom',
-      title: 'Oops...',
-      text: "You don't have enough money to bet",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      background: '#203141',
-      color: '#ffffff'
-    })
+    displayErrorModal("You don't have enough money to bet")
     return
   }
 
@@ -161,7 +140,7 @@ async function bet() {
     result.value = parseFloat(res.data.result).toFixed(2)
     store.dispatch('updateBalance', { balance: res.balance, rank_pts: res.rank_pts })
   } catch (e) {
-    console.log(e)
+    displayErrorModal('Failed trying to place bet')
     return
   }
 

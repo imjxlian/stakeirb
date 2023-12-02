@@ -30,6 +30,8 @@ import { useStore } from 'vuex'
 
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import {sendMessageFromUser} from "@/api/stakeirb-api";
+import {displayErrorModal} from "@/components/modals/modalsManager";
 
 const store = useStore()
 
@@ -75,35 +77,13 @@ const sendMessage = async () => {
   if (store.getters.loggedIn === true) {
     try {
       // Appel à l'API pour envoyer le message
-      await axios.post('http://localhost:3000/messages', message)
+      await sendMessageFromUser(message)
       currentMessage.value = ''
     } catch (error) {
-      await Swal.fire({
-        icon: 'error',
-        toast: true,
-        position: 'bottom',
-        title: 'Oops...',
-        text: error || 'An error occured',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        background: '#203141',
-        color: '#ffffff'
-      })
+      displayErrorModal('Impossible to send message')
     }
   } else {
-    await Swal.fire({
-      icon: 'error',
-      toast: true,
-      position: 'bottom',
-      title: 'Oops...',
-      text: 'You need to be logged in to send a message!',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      background: '#203141',
-      color: '#ffffff'
-    })
+    displayErrorModal('You need to be logged in to send a message!')
   }
 }
 </script>

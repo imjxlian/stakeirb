@@ -74,7 +74,6 @@ export default function (User) {
         where: { uuid_user: req.body.uuid_user },
       });
 
-      console.log(updatedUser.balance);
       res.status(200).send("Update successful");
     } catch (error) {
       console.error("An error occurred:", error);
