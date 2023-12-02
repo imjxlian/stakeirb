@@ -42,10 +42,10 @@ const randomImage = () => {
     "https://i.imgur.com/0y8Ftya.png",
     "https://i.imgur.com/tkKwb.jpg",
     "https://i.imgur.com/bE3yub.png",
-    "https://i.imgur.com/C5mTMb.png"
+    "https://i.imgur.com/C5mTMb.png",
   ];
   return images[Math.floor(Math.random() * images.length)];
-}
+};
 
 const hydrateDatabase = async () => {
   try {

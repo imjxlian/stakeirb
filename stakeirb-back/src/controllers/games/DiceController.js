@@ -67,6 +67,7 @@ export default function (Bet, User) {
       if (bet) {
         user.balance -= bet.bet_amount;
         user.balance += bet.win ? bet.bet_amount * bet.multiplier : 0;
+        user.balance = Math.round(user.balance);
 
         user.rank_pts += parseInt(bet.bet_amount);
         await user.save();

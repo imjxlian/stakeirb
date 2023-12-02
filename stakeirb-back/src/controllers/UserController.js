@@ -63,7 +63,8 @@ export default function (User) {
         return res.status(404).send("User not found");
       }
 
-      const newBalance = parseInt(user.balance) + parseInt(req.body.money_amount);
+      const newBalance =
+        parseInt(user.balance) + parseInt(req.body.money_amount);
 
       // Mettez à jour la balance de l'utilisateur
       await user.update({ balance: newBalance });
@@ -73,7 +74,7 @@ export default function (User) {
         where: { uuid_user: req.body.uuid_user },
       });
 
-      console.log(updatedUser.balance)
+      console.log(updatedUser.balance);
       res.status(200).send("Update successful");
     } catch (error) {
       console.error("An error occurred:", error);

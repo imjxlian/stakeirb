@@ -64,6 +64,8 @@ import axios from 'axios'
 const user = computed(() => store.getters.user)
 const userBets = ref([]) // Utilisation de ref pour suivre les paris reçus
 
+console.log(user.value)
+
 // Get all bets from user with a backend call
 onMounted(async () => {
   const response = await axios.get('http://localhost:3000/bets/user/' + user.value.uuid_user)
@@ -115,9 +117,11 @@ const formatDate = (dateString) => {
 .wrapper {
   width: 75%;
   background-color: var(--grey-700);
+  max-width: var(--max-width);
   padding: 2rem;
   border-radius: 0.5rem;
   text-align: center;
+  margin: 0 auto;
 }
 
 .rank-bar {
