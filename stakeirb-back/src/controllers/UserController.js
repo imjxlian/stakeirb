@@ -37,20 +37,6 @@ export default function (User) {
     }
   });
 
-  // Update a user by UUID
-  router.put("/:uuid_user", jwtMiddleware, async (req, res) => {
-    try {
-      const user = await User.findOne({
-        where: { uuid_user: req.params.uuid_user },
-      });
-      user.update(req.body);
-      res.json(user);
-    } catch (error) {
-      console.error("An error occurred:", error);
-      res.status(500).send("An error occurred");
-    }
-  });
-
   // Delete a user by UUID
   router.delete("/:uuid_user", jwtMiddleware, async (req, res) => {
     try {
@@ -59,6 +45,36 @@ export default function (User) {
       });
       user.destroy();
       res.json(user);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      res.status(500).send("An error occurred");
+    }
+  });
+
+  // Update user balance
+  router.put("/balance", jwtMiddleware, async (req, res) => {
+    try {
+      const user = await User.findOne({
+        where: { uuid_user: req.body.uuid_user },
+      });
+
+      // Assurez-vous que `user` a été trouvé
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const newBalance = parseInt(user.balance) + parseInt(req.body.money_amount);
+
+      // Mettez à jour la balance de l'utilisateur
+      await user.update({ balance: newBalance });
+
+      // Récupérez l'utilisateur mis à jour
+      const updatedUser = await User.findOne({
+        where: { uuid_user: req.body.uuid_user },
+      });
+
+      console.log(updatedUser.balance)
+      res.status(200).send("Update successful");
     } catch (error) {
       console.error("An error occurred:", error);
       res.status(500).send("An error occurred");

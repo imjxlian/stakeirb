@@ -1,33 +1,68 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import VueJwtDecode from 'vue-jwt-decode'
+import {store} from "@/store";
 
 const API_URL = 'http://localhost:3000'
 const USERS_URL = `${API_URL}/users`
 
-export const getAllUsers = async () => {
-  try {
-    const response = await axios.get(USERS_URL)
-    return response.data
-  } catch (e) {
-    console.error(e)
-  }
-}
+export const updateMoneyAmount = async (user) => {
+  await Swal.fire({
+    title: 'Enter the money amount you want to add',
+    input: 'text',
+    inputPlaceholder: 'Enter here...',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    background: '#203141',
+    color: '#ffffff',
+    inputValidator: (value) => {
+      // Vérifie si la valeur est un nombre compris entre 0 et 1000
+      if (!value || isNaN(value) || parseInt(value) < 0 || parseInt(value) > 1000) {
+        return 'Please enter a number between 0 and 1000';
+      }
+    }
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      // Update user money amount
+      const response = await axios.put(`${USERS_URL}/balance`, {
+        money_amount: result.value,
+        uuid_user: user.uuid_user
+      })
 
-export const addUser = async (user) => {
-  try {
-    await axios.post(USERS_URL, user)
-  } catch (e) {
-    console.error(e)
-  }
-}
+      if (response.status === 200) {
+        // Update user money amount in store
+        const newBalance = parseInt(user.balance) + parseInt(result.value)
+        await store.dispatch('updateBalance', {balance: newBalance, rank_pts: user.rank_pts})
 
-export const deleteUser = async (id) => {
-  try {
-    await axios.delete(`${USERS_URL}/${id}`)
-  } catch (e) {
-    console.error(e)
-  }
+        await Swal.fire({
+          icon: 'success',
+          toast: true,
+          position: 'bottom',
+          title: 'Success',
+          text: 'Money amount updated',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#203141',
+          color: '#ffffff'
+        })
+      } else {
+        await Swal.fire({
+          icon: 'error',
+          toast: true,
+          position: 'bottom',
+          title: 'Oops...',
+          text: 'An error occurred',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#203141',
+          color: '#ffffff'
+        })
+      }
+    }
+  })
 }
 
 export const useLogin = async (user, store) => {
