@@ -59,7 +59,7 @@ import { computed } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import CoinIcon from './CoinIcon.vue'
 import { store } from '@/store'
-import {updateMoneyAmount} from "@/api/stakeirb-api";
+import { updateMoneyAmount } from '@/api/stakeirb-api'
 
 const isLoggedIn = computed(() => store.getters.loggedIn)
 const user = computed(() => store.getters.user)
@@ -74,12 +74,12 @@ const toggleChat = () => {
 const formattedUserBalance = computed(() => {
   if (isLoggedIn.value) {
     // Assuming user.balance is the property holding the balance value
-    const balance = parseInt(user.value.balance);
-    return balance.toLocaleString("en-US"); // Use the appropriate property
+    const balance = parseInt(user.value.balance)
+    return balance.toLocaleString('en-US') // Use the appropriate property
   } else {
-    return '0';
+    return '0'
   }
-});
+})
 </script>
 
 <style scoped>

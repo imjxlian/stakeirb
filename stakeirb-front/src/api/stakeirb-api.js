@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import VueJwtDecode from 'vue-jwt-decode'
-import {store} from "@/store";
+import { store } from '@/store'
 
 const API_URL = 'http://localhost:3000'
 const USERS_URL = `${API_URL}/users`
@@ -19,7 +19,7 @@ export const updateMoneyAmount = async (user) => {
     inputValidator: (value) => {
       // Vérifie si la valeur est un nombre compris entre 0 et 1000
       if (!value || isNaN(value) || parseInt(value) < 0 || parseInt(value) > 1000) {
-        return 'Please enter a number between 0 and 1000';
+        return 'Please enter a number between 0 and 1000'
       }
     }
   }).then(async (result) => {
@@ -33,7 +33,7 @@ export const updateMoneyAmount = async (user) => {
       if (response.status === 200) {
         // Update user money amount in store
         const newBalance = parseInt(user.balance) + parseInt(result.value)
-        await store.dispatch('updateBalance', {balance: newBalance, rank_pts: user.rank_pts})
+        await store.dispatch('updateBalance', { balance: newBalance, rank_pts: user.rank_pts })
 
         await Swal.fire({
           icon: 'success',

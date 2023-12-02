@@ -31,12 +31,9 @@ export const store = createStore({
     },
     updateBalance: ({ commit }, data) => {
       const user = JSON.parse(localStorage.getItem('user'))
-      const balance = data.balance.toFixed(0)
-      const rankPts = data.rank_pts
-
-      const newUser = { ...user, balance: balance, rank_pts: rankPts }
+      const newUser = { ...user, balance: data.balance, rank_pts: data.rank_pts }
       localStorage.setItem('user', JSON.stringify(newUser))
-      commit('updateBalance', { balance: balance, rank_pts: rankPts })
+      commit('updateBalance', { balance: data.balance, rank_pts: data.rank_pts })
     }
   },
   getters: {

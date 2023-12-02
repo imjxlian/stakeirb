@@ -113,7 +113,6 @@ function updateRange(newVal) {
 let hideTimer = null
 
 async function bet() {
-
   if (store.getters.loggedIn === false) {
     await Swal.fire({
       icon: 'error',
@@ -156,18 +155,17 @@ async function bet() {
     uuid_user: store.state.user.uuid_user
   }
 
-  const res = await placeDiceBet(bet);
+  const res = await placeDiceBet(bet)
 
   try {
     result.value = parseFloat(res.data.result).toFixed(2)
-    console.log(res.rank_pts)
     store.dispatch('updateBalance', { balance: res.balance, rank_pts: res.rank_pts })
   } catch (e) {
     console.log(e)
     return
   }
 
-  const won = res.win;
+  const won = res.win
   const newBet = { id: Date.now(), win: res.win, result: parseFloat(result.value) }
   betsHistory.value.push(newBet)
 
