@@ -37,6 +37,16 @@ Bets.belongsTo(Game, { foreignKey: "game_id" });
 Messages.belongsTo(User, { foreignKey: "uuid_user" });
 
 // Hydratez la base de données avec des données réalistes
+const randomImage = () => {
+  const images = [
+    "https://i.imgur.com/0y8Ftya.png",
+    "https://i.imgur.com/tkKwb.jpg",
+    "https://i.imgur.com/bE3yub.png",
+    "https://i.imgur.com/C5mTMb.png"
+  ];
+  return images[Math.floor(Math.random() * images.length)];
+}
+
 const hydrateDatabase = async () => {
   try {
     await sequelize.sync({ force: true });
@@ -50,7 +60,7 @@ const hydrateDatabase = async () => {
         "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
       uuid_user: "f7e727c6-257d-4f40-8017-52c31f1f82ca",
       balance: 1000,
-      pfp_url: "https://i.imgur.com/0y8Ftya.png",
+      pfp_url: randomImage(),
       rank_pts: 70,
     });
 
@@ -61,7 +71,7 @@ const hydrateDatabase = async () => {
         "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
       uuid_user: "f7e727c6-257d-4f40-8017-52c31f1f82cb",
       balance: 2000,
-      pfp_url: "https://i.imgur.com/0y8Ftya.png",
+      pfp_url: randomImage(),
       rank_pts: 40,
     });
 

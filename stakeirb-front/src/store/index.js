@@ -14,12 +14,14 @@ export const store = createStore({
       state.loggedIn = false
       state.user = {}
     },
-    updateBalance(state, balance) {
-      state.user.balance = balance
+    updateBalance(state, data) {
+      state.user.balance = data.balance
+      state.user.rank_pts = data.rank_pts
     }
   },
   actions: {
     login: ({ commit }, user) => {
+      user.balance = parseFloat(user.balance).toFixed(0)
       localStorage.setItem('user', JSON.stringify(user))
       commit('login', user)
     },
@@ -27,11 +29,14 @@ export const store = createStore({
       localStorage.removeItem('user')
       commit('logout')
     },
-    updateBalance: ({ commit }, balance) => {
+    updateBalance: ({ commit }, data) => {
       const user = JSON.parse(localStorage.getItem('user'))
-      const newUser = { ...user, balance: balance }
+      const balance = data.balance.toFixed(0)
+      const rankPts = data.rank_pts
+
+      const newUser = { ...user, balance: balance, rank_pts: rankPts }
       localStorage.setItem('user', JSON.stringify(newUser))
-      commit('updateBalance', balance)
+      commit('updateBalance', { balance: balance, rank_pts: rankPts })
     }
   },
   getters: {
