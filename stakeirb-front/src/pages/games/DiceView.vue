@@ -49,9 +49,8 @@ import InputNumber from '../../components/inputs/InputNumber.vue'
 import InputButton from '../../components/inputs/InputButton.vue'
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import Swal from 'sweetalert2'
 import { placeDiceBet } from '../../api/stakeirb-api'
-import {displayErrorModal} from "@/components/modals/modalsManager";
+import { displayErrorModal } from '@/components/modals/modalsManager'
 
 const store = useStore()
 

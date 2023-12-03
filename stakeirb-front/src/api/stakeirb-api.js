@@ -2,7 +2,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import VueJwtDecode from 'vue-jwt-decode'
 import { store } from '@/store'
-import {displayErrorModal, displaySuccessModal} from "@/components/modals/modalsManager";
+import { displayErrorModal, displaySuccessModal } from '@/components/modals/modalsManager'
 
 const API_URL = 'http://localhost:3000'
 const USERS_URL = `${API_URL}/users`
@@ -10,20 +10,20 @@ const BETS_URL = `${API_URL}/bets`
 const MESSAGE_URL = `${API_URL}/messages`
 
 export const getAllBetsFromUser = async (uuid_user) => {
-    try {
-        const response = await axios.get(`${BETS_URL}/user/${uuid_user}`)
-        return response.data
-    } catch (e) {
-      displayErrorModal('Impossible to get bets from user')
-    }
+  try {
+    const response = await axios.get(`${BETS_URL}/user/${uuid_user}`)
+    return response.data
+  } catch (e) {
+    displayErrorModal('Impossible to get bets from user')
+  }
 }
 
 export const sendMessageFromUser = async (message) => {
-    try {
-      await axios.post(`${MESSAGE_URL}`, message)
-    } catch (e) {
-      displayErrorModal('Impossible to send message')
-    }
+  try {
+    await axios.post(`${MESSAGE_URL}`, message)
+  } catch (e) {
+    displayErrorModal('Impossible to send message')
+  }
 }
 
 export const updateMoneyAmount = async (user) => {
@@ -117,10 +117,12 @@ export const placeDiceBet = async (bet) => {
 }
 
 export const getRandomNumberFromApi = async () => {
-    try {
-        let res = await axios.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new')
-        return res.data
-    } catch (e) {
-        displayErrorModal('Impossible to get random number')
-    }
+  try {
+    let res = await axios.get(
+      'https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new'
+    )
+    return res.data
+  } catch (e) {
+    displayErrorModal('Impossible to get random number')
+  }
 }

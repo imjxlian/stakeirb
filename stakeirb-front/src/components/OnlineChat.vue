@@ -28,10 +28,8 @@ import MessageBox from './MessageBox.vue'
 import { useSocket } from '@/socket'
 import { useStore } from 'vuex'
 
-import axios from 'axios'
-import Swal from 'sweetalert2'
-import {sendMessageFromUser} from "@/api/stakeirb-api";
-import {displayErrorModal} from "@/components/modals/modalsManager";
+import { sendMessageFromUser } from '@/api/stakeirb-api'
+import { displayErrorModal } from '@/components/modals/modalsManager'
 
 const store = useStore()
 

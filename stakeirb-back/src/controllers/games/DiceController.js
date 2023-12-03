@@ -40,19 +40,23 @@ export default function (Bet, User) {
 
       const game_id = 1;
 
-      // Get a random number between 0 and 100 from random.org
+      // Get a random number between 0 and 10000 from random.org
       const getRandomNumberFromApi = async () => {
+        const MIN = 0;
+        const MAX = 10000;
         try {
-          let res = await axios.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new')
-          return res.data
+          let res = await axios.get(
+            `https://www.random.org/integers/?num=1&min=${MIN}&max=${MAX}&col=1&base=10&format=plain&rnd=new`,
+          );
+          return res.data;
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
-      }
+      };
 
-      const randomInteger = await getRandomNumberFromApi()
+      const randomInteger = await getRandomNumberFromApi();
 
-      const result = parseFloat(randomInteger);
+      const result = parseFloat(randomInteger / 100);
 
       const multiplier = is_under
         ? (100 / target).toFixed(2)
