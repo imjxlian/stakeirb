@@ -50,7 +50,7 @@ export default function (Bet, User) {
           );
           return res.data;
         } catch (e) {
-          console.log(e);
+          return res.status(500).send("Error while getting random number");
         }
       };
 

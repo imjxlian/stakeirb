@@ -1,8 +1,14 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="!isLoading && userFound">
     <div class="wrapper">
-      <h1>{{ user.username }}</h1>
-      <RankBar class="rank-bar" :progress="user.rank_pts" />
+      <div class="top-infos">
+        <img :src="user?.pfp_url ? user.pfp_url : '../assets/images/users/default-user-img.svg'"
+          alt="User profile picture" class="user-img" />
+        <h1>{{ user?.username }}</h1>
+      </div>
+      <h5 class="secondary-text">Registered on {{ formatDate(user?.createdAt, false) }}</h5>
+      <RankBar class="rank-bar" :progress="user?.rank_pts" />
+      <InputButton :value="'Send a tip'" :type="'success'" :disabled="false" @click="tipUser(user)" v-if="user.uuid_user !== activeUser.uuid_user" />
       <div class="stats-container">
         <h2>Statistics</h2>
         <div class="stats-inner">
@@ -52,31 +58,72 @@
       </table>
     </div>
   </div>
+  <div class="container" v-else-if="isLoading">
+    <div class="wrapper">
+      <h1>Loading...</h1>
+    </div>
+  </div>
+  <div class="container" v-else>
+    <div class="wrapper">
+      <h1>User not found</h1>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import RankBar from '../components/RankBar.vue'
-import CoinIcon from '../components/CoinIcon.vue'
-import { computed, onMounted, ref } from 'vue'
-import { store } from '@/store'
-import { getAllBetsFromUser } from '@/api/stakeirb-api'
+import { ref, computed, watch } from 'vue';
+import { getAllBetsFromUser, getUserByUuid, tipUser } from '@/api/stakeirb-api';
+import { useRoute } from 'vue-router';
+import InputButton from '../components/inputs/InputButton.vue';
+import { useStore } from 'vuex';
+import RankBar from '../components/RankBar.vue';
+import CoinIcon from '../components/CoinIcon.vue';
 
-const user = computed(() => store.getters.user)
-const userBets = ref([]) // Utilisation de ref pour suivre les paris reçus
+const store = useStore();
 
-// Get all bets from user with a backend call
-onMounted(async () => {
-  userBets.value = await getAllBetsFromUser(user.value.uuid_user)
-})
+const activeUser = computed(() => store.state.user);
+const user = ref({});
+const userBets = ref([]);
 
-// Calcul du total des paris
+const isLoading = ref(true);
+const userFound = ref(true);
+
+const route = useRoute();
+const uuidUser = ref(route.params.uuid_user);
+
+// Fetch user data when the component is mounted
+const fetchData = async () => {
+  try {
+    const res = await getUserByUuid(uuidUser.value);
+
+    if (!res) {
+      throw new Error('User not found');
+    }
+
+    user.value = res;
+    userBets.value = await getAllBetsFromUser(uuidUser.value);
+    userFound.value = true;
+  } catch (error) {
+    userFound.value = false;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// Watch for changes in the route parameters and fetch data accordingly
+watch(() => route.params.uuid_user, () => {
+  isLoading.value = true;
+  uuidUser.value = route.params.uuid_user;
+  fetchData();
+});
+
+// Initial data fetch
+fetchData();
+
 const totalBets = computed(() => userBets.value.length)
-
-// Calcul du total misé
 const totalWagered = computed(() => userBets.value.reduce((acc, bet) => acc + bet.bet_amount, 0))
 const formattedTotalWagered = computed(() => totalWagered.value.toLocaleString('en-US'))
 
-// Calcul du total gagné
 const totalWon = computed(
   () =>
     userBets.value.reduce((acc, bet) => acc + bet.bet_amount * bet.multiplier, 0) -
@@ -93,8 +140,7 @@ const formattedBetAmount = (bet_amount) => {
   return newBetAmount.toLocaleString('en-US')
 }
 
-// Fonction pour formater la date
-const formatDate = (dateString) => {
+const formatDate = (dateString, includeHours = true) => {
   const options = {
     year: 'numeric',
     month: 'numeric',
@@ -102,6 +148,12 @@ const formatDate = (dateString) => {
     hour: 'numeric',
     minute: 'numeric'
   }
+
+  if (!includeHours) {
+    delete options.hour
+    delete options.minute
+  }
+
   return new Date(dateString).toLocaleDateString('fr-FR', options)
 }
 </script>
@@ -121,6 +173,11 @@ const formatDate = (dateString) => {
   margin: 0 auto;
 }
 
+.secondary-text {
+  color: var(--grey-200);
+  font-weight: 500;
+}
+
 .rank-bar {
   margin: auto;
   width: 50%;
@@ -137,15 +194,15 @@ const formatDate = (dateString) => {
   font-weight: 500;
 }
 
-.stats-inner > div {
+.stats-inner>div {
   padding: 1rem;
   border-radius: 0.5rem;
   background-color: var(--grey-500);
   margin: 0 1rem;
 }
 
-.stats-inner > div:first-of-type,
-.stats-inner > div:last-of-type {
+.stats-inner>div:first-of-type,
+.stats-inner>div:last-of-type {
   margin: 0;
 }
 
@@ -194,5 +251,19 @@ const formatDate = (dateString) => {
 
 .color-red {
   color: var(--red-500);
+}
+
+.top-infos {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.user-img {
+  height: 3rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
 }
 </style>

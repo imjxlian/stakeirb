@@ -9,6 +9,15 @@ const USERS_URL = `${API_URL}/users`
 const BETS_URL = `${API_URL}/bets`
 const MESSAGE_URL = `${API_URL}/messages`
 
+export const getUserByUuid = async (uuid_user) => {
+  try {
+    const response = await axios.get(`${USERS_URL}/${uuid_user}`)
+    return response.data
+  } catch (e) {
+    displayErrorModal('Impossible to get user')
+  }
+}
+
 export const getAllBetsFromUser = async (uuid_user) => {
   try {
     const response = await axios.get(`${BETS_URL}/user/${uuid_user}`)
@@ -25,6 +34,64 @@ export const sendMessageFromUser = async (message) => {
     displayErrorModal('Impossible to send message')
   }
 }
+
+export const tipUser = async (user) => {
+
+  const currentUser = store.state.user
+
+  if (currentUser.uuid_user === user.uuid_user) {
+    displayErrorModal('You can\'t tip yourself')
+    return
+  }
+
+  await Swal.fire({
+    title: 'Enter the amount you want to tip',
+    input: 'text',
+    inputPlaceholder: 'Enter here...',
+    showCancelButton: true,
+    confirmButtonText: 'Send',
+    cancelButtonText: 'Cancel',
+    background: '#203141',
+    color: '#ffffff',
+    inputValidator: (value) => {
+      // Vérifie si la valeur est un nombre compris entre 0 et 100000
+      if (!value || isNaN(value) || parseInt(value) < 0 || parseInt(value) > 100000) {
+        return 'Please enter a number between 0 and 100,000'
+      }
+    }
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const currentUserBalance = parseInt(currentUser.balance)
+      const resultValue = parseInt(result.value)
+      if (currentUserBalance < resultValue) {
+        displayErrorModal('You don\'t have enough money')
+        return
+      }
+
+      const tip = {
+        sender: store.state.user,
+        receiver: user
+      }
+
+      const response = await axios.post(`${USERS_URL}/tip`, {
+        tip_amount: resultValue,
+        receiver: tip.receiver.uuid_user
+      })
+
+      // Update the user balance in store
+      const newBalance = response.data.new_balance
+      await store.dispatch('updateBalance', { balance: newBalance, rank_pts: currentUser.rank_pts })
+
+      if (response.status === 200) {
+        displaySuccessModal(`You successfully sent ${resultValue} to ${tip.receiver.username}`)
+      } else {
+        displayErrorModal('Impossible to send tip')
+      }
+    }
+  })
+}
+
+
 
 export const updateMoneyAmount = async (user) => {
   await Swal.fire({
