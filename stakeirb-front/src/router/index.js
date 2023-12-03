@@ -43,22 +43,22 @@ const router = createRouter({
     {
       path: '/games/dice',
       name: 'dice',
-      component: () => import('../pages/Games/DiceView.vue')
+      component: () => import('../pages/games/DiceView.vue')
     },
     {
       path: '/games/mines',
       name: 'mines',
-      component: () => import('../pages/Games/MinesView.vue')
+      component: () => import('../pages/games/MinesView.vue')
     },
     {
       path: '/games/roulette',
       name: 'roulette',
-      component: () => import('../pages/Games/RouletteView.vue')
+      component: () => import('../pages/games/RouletteView.vue')
     },
     {
       path: '/games/plinko',
       name: 'plinko',
-      component: () => import('../pages/Games/PlinkoView.vue')
+      component: () => import('../pages/games/PlinkoView.vue')
     },
     {
       path: '/logout',
