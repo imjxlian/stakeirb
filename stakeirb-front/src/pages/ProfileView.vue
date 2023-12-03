@@ -59,17 +59,14 @@ import RankBar from '../components/RankBar.vue'
 import CoinIcon from '../components/CoinIcon.vue'
 import { computed, onMounted, ref } from 'vue'
 import { store } from '@/store'
-import axios from 'axios'
+import {getAllBetsFromUser} from "@/api/stakeirb-api";
 
 const user = computed(() => store.getters.user)
 const userBets = ref([]) // Utilisation de ref pour suivre les paris reçus
 
-console.log(user.value)
-
 // Get all bets from user with a backend call
 onMounted(async () => {
-  const response = await axios.get('http://localhost:3000/bets/user/' + user.value.uuid_user)
-  userBets.value = response.data
+  userBets.value = await getAllBetsFromUser(user.value.uuid_user)
 })
 
 // Calcul du total des paris
