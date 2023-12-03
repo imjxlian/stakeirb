@@ -59,7 +59,7 @@ import RankBar from '../components/RankBar.vue'
 import CoinIcon from '../components/CoinIcon.vue'
 import { computed, onMounted, ref } from 'vue'
 import { store } from '@/store'
-import {getAllBetsFromUser} from "@/api/stakeirb-api";
+import { getAllBetsFromUser } from '@/api/stakeirb-api'
 
 const user = computed(() => store.getters.user)
 const userBets = ref([]) // Utilisation de ref pour suivre les paris reçus
@@ -93,7 +93,7 @@ const formattedBetAmount = (bet_amount) => {
   return newBetAmount.toLocaleString('en-US')
 }
 
-// Fonction pour formater la date (vous pouvez ajuster cela en fonction de votre format préféré)
+// Fonction pour formater la date
 const formatDate = (dateString) => {
   const options = {
     year: 'numeric',

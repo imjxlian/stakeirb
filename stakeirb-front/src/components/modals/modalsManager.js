@@ -1,31 +1,31 @@
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 
 export const displayErrorModal = (error) => {
-    Swal.fire({
-        icon: "error",
-        toast: true,
-        position: "bottom",
-        title: "Oops...",
-        text: error,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        background: "#203141",
-        color: "#ffffff",
-    });
+  Swal.fire({
+    icon: 'error',
+    toast: true,
+    position: 'bottom',
+    title: 'Oops...',
+    text: error,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    background: '#203141',
+    color: '#ffffff'
+  })
 }
 
 export const displaySuccessModal = (message) => {
-    Swal.fire({
-        icon: "success",
-        toast: true,
-        position: "bottom",
-        title: "Success",
-        text: message,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        background: "#203141",
-        color: "#ffffff",
-    });
+  Swal.fire({
+    icon: 'success',
+    toast: true,
+    position: 'bottom',
+    title: 'Success',
+    text: message,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    background: '#203141',
+    color: '#ffffff'
+  })
 }
