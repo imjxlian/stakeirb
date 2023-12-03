@@ -130,9 +130,10 @@ app.get("/", (req, res) => {
   res.send("*-- Welcome to Stak'Eirb API --*");
 });
 
+// Setting * for CORS
 import { Server } from "socket.io";
 const io = new Server(server, {
-  cors: { origin: ["https://stakeirb-front.vercel.app/", "http://stakeirb-front.vercel.app/"] },
+  cors: { origin: '*' },
 });
 
 let usersOnline = [];
