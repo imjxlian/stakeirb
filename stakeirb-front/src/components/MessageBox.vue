@@ -2,7 +2,9 @@
   <div class="message-box">
     <div class="user">
       <img class="user-img" :src="message.User.pfp_url" alt="" v-if="message.User.pfp_url" />
-      <span class="user-name">{{ message.User.username }}</span>
+      <router-link :to="'/profile/' + message.User.uuid_user" class="profile-link">
+        <span class="user-name">{{ message.User.username }}</span>
+      </router-link>
     </div>
     <span class="message">{{ message.message }}</span>
   </div>
@@ -40,6 +42,15 @@ defineProps(['message'])
   align-items: center;
   justify-content: flex-start;
   gap: 0.3rem;
+}
+
+.profile-link {
+  text-decoration: none;
+  color: var(--color-text-light);
+}
+
+.profile-link:hover {
+  color: var(--grey-200);
 }
 
 .user-img {

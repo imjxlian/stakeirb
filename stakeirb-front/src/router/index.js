@@ -12,15 +12,31 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
+      beforeEnter: (to, from, next) => {
+        // If already logged in, redirect to home
+        if (store.getters.loggedIn) {
+          next({ name: 'home' })
+        } else {
+          next()
+        }
+      },
       component: () => import('../pages/LoginView.vue')
     },
     {
       path: '/register',
       name: 'register',
+      beforeEnter: (to, from, next) => {
+        // If already logged in, redirect to home
+        if (store.getters.loggedIn) {
+          next({ name: 'home' })
+        } else {
+          next()
+        }
+      },
       component: () => import('../pages/RegisterView.vue')
     },
     {
-      path: '/profile/:user_uuid',
+      path: '/profile/:uuid_user',
       name: 'profile',
       component: () => import('../pages/ProfileView.vue')
     },
