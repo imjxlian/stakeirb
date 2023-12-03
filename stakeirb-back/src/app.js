@@ -132,7 +132,7 @@ app.get("/", (req, res) => {
 
 import { Server } from "socket.io";
 const io = new Server(server, {
-  cors: { origin: ["http://localhost:5173", "http://127.0.0.1:5173"] },
+  cors: { origin: ["https://stakeirb-front.vercel.app/", "http://stakeirb-front.vercel.app/"] },
 });
 
 let usersOnline = [];

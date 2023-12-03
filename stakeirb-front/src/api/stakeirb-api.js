@@ -4,7 +4,7 @@ import VueJwtDecode from 'vue-jwt-decode'
 import { store } from '@/store'
 import { displayErrorModal, displaySuccessModal } from '@/components/modals/modalsManager'
 
-const API_URL = 'http://localhost:3000'
+const API_URL = 'https://stakeirb-back.vercel.app'
 const USERS_URL = `${API_URL}/users`
 const BETS_URL = `${API_URL}/bets`
 const MESSAGE_URL = `${API_URL}/messages`
@@ -171,7 +171,7 @@ export const useRegister = async (user, store) => {
 
 export const placeDiceBet = async (bet) => {
   try {
-    let res = await axios.post('http://localhost:3000/games/dice', {
+    let res = await axios.post(`${API_URL}/games/dice`, {
       is_under: bet.is_under,
       target: bet.target,
       bet_amount: bet.bet_amount
