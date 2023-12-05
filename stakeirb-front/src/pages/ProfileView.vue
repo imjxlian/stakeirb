@@ -2,13 +2,22 @@
   <div class="container" v-if="!isLoading && userFound">
     <div class="wrapper">
       <div class="top-infos">
-        <img :src="user?.pfp_url ? user.pfp_url : '../assets/images/users/default-user-img.svg'"
-          alt="User profile picture" class="user-img" />
+        <img
+          :src="user?.pfp_url ? user.pfp_url : '../assets/images/users/default-user-img.svg'"
+          alt="User profile picture"
+          class="user-img"
+        />
         <h1>{{ user?.username }}</h1>
       </div>
       <h5 class="secondary-text">Registered on {{ formatDate(user?.createdAt, false) }}</h5>
       <RankBar class="rank-bar" :progress="user?.rank_pts" />
-      <InputButton :value="'Send a tip'" :type="'success'" :disabled="false" @click="tipUser(user)" v-if="user.uuid_user !== activeUser.uuid_user" />
+      <InputButton
+        :value="'Send a tip'"
+        :type="'success'"
+        :disabled="false"
+        @click="tipUser(user)"
+        v-if="user.uuid_user !== activeUser.uuid_user"
+      />
       <div class="stats-container">
         <h2>Statistics</h2>
         <div class="stats-inner">
@@ -71,54 +80,57 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { getAllBetsFromUser, getUserByUuid, tipUser } from '@/api/stakeirb-api';
-import { useRoute } from 'vue-router';
-import InputButton from '../components/inputs/InputButton.vue';
-import { useStore } from 'vuex';
-import RankBar from '../components/RankBar.vue';
-import CoinIcon from '../components/CoinIcon.vue';
+import { ref, computed, watch } from 'vue'
+import { getAllBetsFromUser, getUserByUuid, tipUser } from '@/api/stakeirb-api'
+import { useRoute } from 'vue-router'
+import InputButton from '../components/inputs/InputButton.vue'
+import { useStore } from 'vuex'
+import RankBar from '../components/RankBar.vue'
+import CoinIcon from '../components/CoinIcon.vue'
 
-const store = useStore();
+const store = useStore()
 
-const activeUser = computed(() => store.state.user);
-const user = ref({});
-const userBets = ref([]);
+const activeUser = computed(() => store.state.user)
+const user = ref({})
+const userBets = ref([])
 
-const isLoading = ref(true);
-const userFound = ref(true);
+const isLoading = ref(true)
+const userFound = ref(true)
 
-const route = useRoute();
-const uuidUser = ref(route.params.uuid_user);
+const route = useRoute()
+const uuidUser = ref(route.params.uuid_user)
 
 // Fetch user data when the component is mounted
 const fetchData = async () => {
   try {
-    const res = await getUserByUuid(uuidUser.value);
+    const res = await getUserByUuid(uuidUser.value)
 
     if (!res) {
-      throw new Error('User not found');
+      throw new Error('User not found')
     }
 
-    user.value = res;
-    userBets.value = await getAllBetsFromUser(uuidUser.value);
-    userFound.value = true;
+    user.value = res
+    userBets.value = await getAllBetsFromUser(uuidUser.value)
+    userFound.value = true
   } catch (error) {
-    userFound.value = false;
+    userFound.value = false
   } finally {
-    isLoading.value = false;
+    isLoading.value = false
   }
-};
+}
 
 // Watch for changes in the route parameters and fetch data accordingly
-watch(() => route.params.uuid_user, () => {
-  isLoading.value = true;
-  uuidUser.value = route.params.uuid_user;
-  fetchData();
-});
+watch(
+  () => route.params.uuid_user,
+  () => {
+    isLoading.value = true
+    uuidUser.value = route.params.uuid_user
+    fetchData()
+  }
+)
 
 // Initial data fetch
-fetchData();
+fetchData()
 
 const totalBets = computed(() => userBets.value.length)
 const totalWagered = computed(() => userBets.value.reduce((acc, bet) => acc + bet.bet_amount, 0))
@@ -194,15 +206,15 @@ const formatDate = (dateString, includeHours = true) => {
   font-weight: 500;
 }
 
-.stats-inner>div {
+.stats-inner > div {
   padding: 1rem;
   border-radius: 0.5rem;
   background-color: var(--grey-500);
   margin: 0 1rem;
 }
 
-.stats-inner>div:first-of-type,
-.stats-inner>div:last-of-type {
+.stats-inner > div:first-of-type,
+.stats-inner > div:last-of-type {
   margin: 0;
 }
 

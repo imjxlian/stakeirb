@@ -36,22 +36,23 @@ export const sendMessageFromUser = async (message) => {
 }
 
 export const tipUser = async (user) => {
-
   const currentUser = store.state.user
 
   if (currentUser.uuid_user === user.uuid_user) {
-    displayErrorModal('You can\'t tip yourself')
+    displayErrorModal("You can't tip yourself")
     return
   }
 
   await Swal.fire({
     title: 'Enter the amount you want to tip',
     input: 'text',
-    inputPlaceholder: 'Enter here...',
+    inputPlaceholder: 'Ex: 500',
     showCancelButton: true,
-    confirmButtonText: 'Send',
+    confirmButtonText: 'Send to ' + user.username,
     cancelButtonText: 'Cancel',
     background: '#203141',
+    confirmButtonColor: '#00b894',
+    cancelButtonColor: '#e34242',
     color: '#ffffff',
     inputValidator: (value) => {
       // Vérifie si la valeur est un nombre compris entre 0 et 100000
@@ -64,7 +65,7 @@ export const tipUser = async (user) => {
       const currentUserBalance = parseInt(currentUser.balance)
       const resultValue = parseInt(result.value)
       if (currentUserBalance < resultValue) {
-        displayErrorModal('You don\'t have enough money')
+        displayErrorModal("You don't have enough money")
         return
       }
 
@@ -91,20 +92,20 @@ export const tipUser = async (user) => {
   })
 }
 
-
-
 export const updateMoneyAmount = async (user) => {
   await Swal.fire({
-    title: 'Enter the money amount you want to add',
+    title: 'Enter the amount to add',
     input: 'text',
-    inputPlaceholder: 'Enter here...',
+    inputPlaceholder: 'Ex: 500',
     showCancelButton: true,
-    confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
+    confirmButtonText: 'Add',
     background: '#203141',
+    confirmButtonColor: '#00b894',
+    cancelButtonColor: '#e34242',
     color: '#ffffff',
     inputValidator: (value) => {
-      // Vérifie si la valeur est un nombre compris entre 0 et 1000
+      // Check if the value is a number between 0 and 1000
       if (!value || isNaN(value) || parseInt(value) < 0 || parseInt(value) > 1000) {
         return 'Please enter a number between 0 and 1000'
       }
@@ -113,13 +114,12 @@ export const updateMoneyAmount = async (user) => {
     if (result.isConfirmed) {
       // Update user money amount
       const response = await axios.put(`${USERS_URL}/balance`, {
-        money_amount: result.value,
-        uuid_user: user.uuid_user
+        money_amount: result.value
       })
 
       if (response.status === 200) {
         // Update user money amount in store
-        const newBalance = parseInt(user.balance) + parseInt(result.value)
+        const newBalance = response.data.balance
         await store.dispatch('updateBalance', { balance: newBalance, rank_pts: user.rank_pts })
         displaySuccessModal('Money amount updated')
       } else {
@@ -180,16 +180,5 @@ export const placeDiceBet = async (bet) => {
     return res.data
   } catch (e) {
     displayErrorModal('Impossible to place bet')
-  }
-}
-
-export const getRandomNumberFromApi = async () => {
-  try {
-    let res = await axios.get(
-      'https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new'
-    )
-    return res.data
-  } catch (e) {
-    displayErrorModal('Impossible to get random number')
   }
 }

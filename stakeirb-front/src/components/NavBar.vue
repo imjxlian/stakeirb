@@ -73,9 +73,8 @@ const toggleChat = () => {
 
 const formattedUserBalance = computed(() => {
   if (isLoggedIn.value) {
-    // Assuming user.balance is the property holding the balance value
     const balance = parseInt(user.value.balance)
-    return balance.toLocaleString('en-US') // Use the appropriate property
+    return balance.toLocaleString('en-US')
   } else {
     return '0'
   }

@@ -1,5 +1,3 @@
-// controllers/BetController.js
-
 import express from "express";
 
 const router = express.Router();

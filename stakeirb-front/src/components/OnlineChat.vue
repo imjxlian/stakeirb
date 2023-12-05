@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import InputButton from './inputs/InputButton.vue'
 import InputText from './inputs/InputText.vue'
 import MessageBox from './MessageBox.vue'
@@ -32,8 +32,6 @@ import { sendMessageFromUser } from '@/api/stakeirb-api'
 import { displayErrorModal } from '@/components/modals/modalsManager'
 
 const store = useStore()
-
-const uuid_user = computed(() => store.getters.user.uuid_user)
 
 const onlineCount = ref(0)
 
@@ -68,7 +66,6 @@ socket.on('newMessage', (message) => {
 
 const sendMessage = async () => {
   const message = {
-    uuid_user: uuid_user.value,
     message: currentMessage.value
   }
 

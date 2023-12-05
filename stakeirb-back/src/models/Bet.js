@@ -1,5 +1,3 @@
-// models/Bet.js
-
 import { DataTypes } from "sequelize";
 
 export default function (sequelize) {
