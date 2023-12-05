@@ -1,5 +1,3 @@
-// models/Game.js
-
 import { DataTypes } from "sequelize";
 
 export default function (sequelize) {

@@ -1,5 +1,3 @@
-// controllers/UserController.js
-
 import express from "express";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
@@ -52,11 +50,12 @@ export default function (User) {
   // Update user balance
   router.put("/balance", jwtMiddleware, async (req, res) => {
     try {
+      const uuid_user = req.user.uuid_user;
+
       const user = await User.findOne({
-        where: { uuid_user: req.body.uuid_user },
+        where: { uuid_user: uuid_user },
       });
 
-      // Assurez-vous que `user` a été trouvé
       if (!user) {
         return res.status(404).send("User not found");
       }
@@ -64,15 +63,14 @@ export default function (User) {
       const newBalance =
         parseInt(user.balance) + parseInt(req.body.money_amount);
 
-      // Mettez à jour la balance de l'utilisateur
-      await user.update({ balance: newBalance });
+      // Update user balance
+      const response = await user.update({ balance: newBalance });
 
-      // Récupérez l'utilisateur mis à jour
-      const updatedUser = await User.findOne({
-        where: { uuid_user: req.body.uuid_user },
-      });
+      if (!response) {
+        return res.status(500).send("An error occurred");
+      }
 
-      res.status(200).send("Update successful");
+      return res.status(200).json({ balance: response.balance });
     } catch (error) {
       res.status(500).send("An error occurred");
     }
@@ -136,24 +134,34 @@ export default function (User) {
     const { receiver, tip_amount } = req.body;
     const uuid_user = receiver;
     try {
-      
-      if (tip_amount <= 0) return res.status(400).json({ message: "Invalid tip amount!" });
+      if (tip_amount <= 0)
+        return res.status(400).json({ message: "Invalid tip amount!" });
 
       const receiver = await User.findOne({ where: { uuid_user } });
-      const sender = await User.findOne({ where: { uuid_user: req.user.uuid_user } });
+      const sender = await User.findOne({
+        where: { uuid_user: req.user.uuid_user },
+      });
 
-      if (tip_amount > sender.balance) return res.status(400).json({ message: "You don't have enough money!" });
+      if (tip_amount > sender.balance)
+        return res
+          .status(400)
+          .json({ message: "You don't have enough money!" });
 
-      if (!receiver || !sender) return res.status(400).json({ message: "User not found!" });
-      if (sender === receiver) return res.status(400).json({ message: "You can't tip yourself!" });
+      if (!receiver || !sender)
+        return res.status(400).json({ message: "User not found!" });
+      if (sender === receiver)
+        return res.status(400).json({ message: "You can't tip yourself!" });
 
-      const newReceiverBalance = parseInt(receiver.balance) + parseInt(tip_amount);
+      const newReceiverBalance =
+        parseInt(receiver.balance) + parseInt(tip_amount);
       await receiver.update({ balance: newReceiverBalance });
 
       const newSenderBalance = parseInt(sender.balance) - parseInt(tip_amount);
       await sender.update({ balance: newSenderBalance });
 
-      return res.status(200).json({ message: "Tip successful!", new_balance: newSenderBalance });
+      return res
+        .status(200)
+        .json({ message: "Tip successful!", new_balance: newSenderBalance });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

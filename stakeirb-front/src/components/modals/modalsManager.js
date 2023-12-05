@@ -11,6 +11,8 @@ export const displayErrorModal = (error) => {
     timer: 3000,
     timerProgressBar: true,
     background: '#203141',
+    confirmButtonColor: '#00b894',
+    cancelButtonColor: '#e34242',
     color: '#ffffff'
   })
 }
@@ -26,6 +28,8 @@ export const displaySuccessModal = (message) => {
     timer: 3000,
     timerProgressBar: true,
     background: '#203141',
+    confirmButtonColor: '#00b894',
+    cancelButtonColor: '#e34242',
     color: '#ffffff'
   })
 }

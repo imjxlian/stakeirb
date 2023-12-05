@@ -1,5 +1,3 @@
-// controllers/MessageController.js
-
 import express from "express";
 
 import { jwtMiddleware } from "../jwt/jwtAuth.js";
@@ -10,7 +8,8 @@ export default function (Message, User, io) {
   // Create a message
   router.post("/", jwtMiddleware, async (req, res) => {
     try {
-      const { uuid_user, message } = req.body;
+      const { message } = req.body;
+      const uuid_user = req.user.uuid_user;
 
       if (!uuid_user || !message) {
         return res.status(400).send("Missing fields");
@@ -33,19 +32,22 @@ export default function (Message, User, io) {
         return res.status(500).send("An error occurred");
       }
 
-      const user = await User.findOne({ where: { uuid_user: uuid_user } });
+      const user = await User.findOne({
+        where: { uuid_user: uuid_user },
+        attributes: ["uuid_user", "username", "pfp_url"],
+      });
 
       if (!user) {
         return res.status(500).send("User not found");
       }
 
       newMessage.User = user;
+      delete newMessage.uuid_user;
 
       io.emit("newMessage", newMessage);
 
       res.status(201).json(response);
     } catch (error) {
-      console.error("An error occurred:", error);
       res.status(500).send("An error occurred");
     }
   });
@@ -71,7 +73,6 @@ export default function (Message, User, io) {
 
       res.json(messages);
     } catch (error) {
-      console.error("An error occurred:", error);
       res.status(500).send("An error occurred");
     }
   });
@@ -82,11 +83,11 @@ export default function (Message, User, io) {
       const message = await Message.findOne({ where: { id: req.params.id } });
       res.json(message);
     } catch (error) {
-      console.error("An error occurred:", error);
       res.status(500).send("An error occurred");
     }
   });
 
+  // Send all messages to the client when a new user connects
   io.on("connection", (socket) => {
     socket.on("getMessages", async () => {
       try {

@@ -89,7 +89,7 @@ export default function (Bet, User) {
         await user.save();
       }
 
-      // Create a newBet that includes rank_pts and balance
+      // Create a new bet that includes rank_pts and balance
       const newBet = {
         uuid_bet: bet.uuid_bet,
         uuid_user: bet.uuid_user,

@@ -1,5 +1,3 @@
-// controllers/GameController.js
-
 import express from "express";
 import { jwtMiddleware } from "../jwt/jwtAuth.js";
 
