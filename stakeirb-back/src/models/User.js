@@ -27,7 +27,8 @@ export default function (sequelize) {
     },
     pfp_url: {
       type: DataTypes.STRING(255),
-      defaultValue: "https://i.imgur.com/0y8Ftya.png",
+      defaultValue:
+        "https://image.noelshack.com/fichiers/2023/49/2/1701785884-stakeirb-logo.png",
     },
     rank_pts: {
       type: DataTypes.INTEGER,

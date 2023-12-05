@@ -21,7 +21,7 @@
             label="Win Amount"
             imageSrc="../src/assets/images/icons/coineirb.png"
             :disabled="true"
-            :actions="[{ value: 'Copy' }]"
+            :actions="[{ value: 'Copy', action: copyWinAmount }]"
           />
           <InputButton class="bet-btn" value="Bet" type="success" :disabled="false" :action="bet" />
         </div>
@@ -74,6 +74,10 @@ const inputActions = [
   { value: '2x', action: multiplyBy2 },
   { value: 'Max', action: maxBet }
 ]
+
+function copyWinAmount() {
+  navigator.clipboard.writeText((betAmount.value * multiplier.value).toFixed(0))
+}
 
 function updateBetAmount(newVal) {
   betAmount.value = Number(newVal)
