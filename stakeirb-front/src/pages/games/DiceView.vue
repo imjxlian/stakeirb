@@ -64,6 +64,7 @@ let result = ref((0.0).toFixed(2))
 let betsHistory = ref([])
 let hideDice = ref(true)
 let diceScale = ref(0.95)
+let isBetting = ref(false)
 
 const multiplier = computed(() =>
   isUnder.value ? (100 / range.value).toFixed(2) : (100 / (100 - range.value)).toFixed(2)
@@ -117,6 +118,10 @@ function updateRange(newVal) {
 let hideTimer = null
 
 async function bet() {
+  // isBetting.value is used to prevent spamming the bet button and sending multiple requests
+  if (isBetting.value) return
+  isBetting.value = true
+
   if (store.getters.loggedIn === false) {
     displayErrorModal('You need to be logged in to bet')
     return
@@ -156,6 +161,8 @@ async function bet() {
   }
 
   playSound('../src/assets/sounds/rolling.mp3')
+
+  isBetting.value = false
 
   if (won) setTimeout(() => playSound('../src/assets/sounds/win.mp3'), 300)
 
